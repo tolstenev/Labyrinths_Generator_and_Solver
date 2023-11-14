@@ -1,0 +1,5 @@
+src/build_qt/
+build_clion/
+cmake-build-debug/
+Maze/
+.idea/
