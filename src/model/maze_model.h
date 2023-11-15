@@ -1,6 +1,9 @@
 #ifndef MAZE_MODEL_MAZE_MODEL_H
 #define MAZE_MODEL_MAZE_MODEL_H
 
+#include <iostream>
+#include <random>
+#include <stack>
 #include <vector>
 
 namespace s21 {
@@ -18,12 +21,22 @@ struct Cell {
   bool down;
 };
 
+struct Finder {
+  int step = 0;
+  Finder *up = nullptr;
+  Finder *down = nullptr;
+  Finder *left = nullptr;
+  Finder *right = nullptr;
+};
+
 class MazeModel {
  public:
   MazeModel() = default;
   ~MazeModel() = default;
 
   void Generate(int rows, int cols);
+  std::stack<std::pair<int, int>> Solution(std::pair<int, int> start,
+                                           std::pair<int, int> finish);
 
   void SetRows(int rows);
   void SetCols(int cols);

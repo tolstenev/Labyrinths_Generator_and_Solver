@@ -1,8 +1,5 @@
 #include "maze_model.h"
 
-#include <iostream>
-#include <random>
-
 using namespace s21;
 
 void MazeModel::Generate(int rows, int cols) {
@@ -34,7 +31,6 @@ void MazeModel::LastStr(std::vector<Cell> &str) {
       str[i].right = 0;
       UniteSet(str, i);
     }
-    // UniteSet(str, i);
   }
 }
 
@@ -175,9 +171,91 @@ void MazeModel::PrintLab() {
   }
 }
 
+std::stack<std::pair<int, int>> MazeModel::Solution(
+    std::pair<int, int> start, std::pair<int, int> finish) {
+  std::vector<std::vector<Finder>> lab(data_.rows,
+                                       std::vector<Finder>(data_.cols));
+  for (int i = 0; i < data_.rows; i++) {
+    for (int j = 0; j < data_.rows; j++) {
+      if (!data_.matrix_right[i][j]) lab[i][j].right = &lab[i][j + 1];
+      if (!data_.matrix_down[i][j]) lab[i][j].down = &lab[i + 1][j];
+      if (i > 0 && !data_.matrix_down[i - 1][j]) lab[i][j].up = &lab[i - 1][j];
+      if (j > 0 && !data_.matrix_right[i][j - 1])
+        lab[i][j].left = &lab[i][j - 1];
+    }
+  }
+  lab[start.first][start.second].step = 1;
+  int n = 1;
+  while (!lab[finish.first][finish.second].step) {
+    int next = 0;
+    for (int i = 0; i < data_.rows; i++) {
+      for (int j = 0; j < data_.rows; j++) {
+        if (lab[i][j].step == n) {
+          if (lab[i][j].right && !lab[i][j].right->step) {
+            lab[i][j].right->step = n + 1;
+            next++;
+          }
+          if (lab[i][j].left && !lab[i][j].left->step) {
+            lab[i][j].left->step = n + 1;
+            next++;
+          }
+          if (lab[i][j].up && !lab[i][j].up->step) {
+            lab[i][j].up->step = n + 1;
+            next++;
+          }
+          if (lab[i][j].down && !lab[i][j].down->step) {
+            lab[i][j].down->step = n + 1;
+            next++;
+          }
+        }
+      }
+    }
+    if (!next) break;
+    n++;
+  }
+  if (!lab[finish.first][finish.second].step) {
+    throw std::invalid_argument("Путь не найден!\n");
+  } else {
+    int i = finish.first, j = finish.second;
+    std::stack<std::pair<int, int>> way;
+    way.push(std::make_pair(i, j));
+    while (way.top() != start) {
+      if (lab[i][j].right && lab[i][j].right->step == n - 1) {
+        j++;
+      } else if (lab[i][j].left && lab[i][j].left->step == n - 1) {
+        j--;
+      } else if (lab[i][j].up && lab[i][j].up->step == n - 1) {
+        i--;
+      } else if (lab[i][j].down && lab[i][j].down->step == n - 1) {
+        i++;
+      }
+      way.push(std::make_pair(i, j));
+      n--;
+    }
+    return way;
+  }
+}
+
+void PrintStack(std::stack<std::pair<int, int>> s) {
+  while (!s.empty()) {
+    std::cout << "(" << s.top().first << ", " << s.top().second << ") ";
+    s.pop();
+  }
+  std::cout << '\n';
+}
+
 int main() {
   MazeModel A;
-  A.Generate(40, 40);
+  A.Generate(10, 10);
+  //   try {
+  //      std::stack<std::pair<int, int>> B = A.Solution(std::make_pair(0, 0),
+  //      std::make_pair(4, 4));
+  //   } catch (std::exception &e) {
+  //     std::cout << e.what() << std::endl;
+  //   }
+  std::stack<std::pair<int, int>> B =
+      A.Solution(std::make_pair(0, 0), std::make_pair(1, 9));
   // A.PrintMatrix();
   A.PrintLab();
+  PrintStack(B);
 }
