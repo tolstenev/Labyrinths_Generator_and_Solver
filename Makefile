@@ -6,8 +6,8 @@ MAIN			:= ./src/main.cc
 VIEW_HDR		:= ./src/view/maze_window.h
 VIEW_SRC		:= ./src/view/maze_window.cc
 CONTROLLER_HDR	:=
-MODEL_HDR		:=
-MODEL_SRC		:=
+MODEL_HDR		:= ./src/model/maze_model.h
+MODEL_SRC		:= ./src/model/maze_model.cc
 
 INSTALL_DIR 	:= $(HOME)/Desktop
 
