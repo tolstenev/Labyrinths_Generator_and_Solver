@@ -28,6 +28,7 @@ class MazeModel {
   void SetRows(int rows);
   void SetCols(int cols);
   void PrintMatrix();
+  void PrintLab();
 
  private:
   Data data_;
