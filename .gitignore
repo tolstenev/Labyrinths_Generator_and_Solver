@@ -3,3 +3,4 @@ build_clion/
 cmake-build-debug/
 Maze/
 .idea/
+build/
