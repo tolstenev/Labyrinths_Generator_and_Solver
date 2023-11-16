@@ -1,8 +1,19 @@
-#ifndef MAZEWINDOW_H
-#define MAZEWINDOW_H
+#ifndef MAZE_VIEW_MAZE_WINDOW_H
+#define MAZE_VIEW_MAZE_WINDOW_H
 
 #include <QKeyEvent>
 #include <QMainWindow>
+#include <fstream>
+#include <iostream>
+
+#include "./ui_maze_window.h"
+//#include <QGraphicsView>
+//#include <QGraphicsScene>
+//#include <QLineF>
+//#include <QPen>
+#include <QFile>
+#include <QPainter>
+#include <QTextStream>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -20,11 +31,14 @@ class MazeWindow : public QMainWindow {
   ~MazeWindow();
 
   void keyPressEvent(QKeyEvent *event) override;
+  void paintEvent(QPaintEvent *event) override;
 
  private:
-  Ui::MazeWindow *ui;
+  Ui::MazeWindow *ui_;
+  void DrawBoarders(QPainter *painter) const;
+  void DrawMaze(QPainter *painter) const;
 };
 
 }  // namespace s21
 
-#endif  // MAZEWINDOW_H
+#endif  // MAZE_VIEW_MAZE_WINDOW_H
