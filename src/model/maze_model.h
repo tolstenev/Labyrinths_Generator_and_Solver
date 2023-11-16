@@ -53,6 +53,12 @@ class MazeModel {
   void CopyString(std::vector<Cell> str, int n);
   void UniteSet(std::vector<Cell> &str, int i);
   void SizeMatrix(int rows, int cols);
+  std::vector<std::vector<Finder>> InitLab();
+  int Wave(std::vector<std::vector<Finder>> *lab, std::pair<int, int> start,
+           std::pair<int, int> finish);
+  std::stack<std::pair<int, int>> FindWay(std::vector<std::vector<Finder>> lab,
+                                          int n, std::pair<int, int> start,
+                                          std::pair<int, int> finish);
 };
 
 }  // namespace s21
