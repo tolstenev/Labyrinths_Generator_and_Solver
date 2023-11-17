@@ -258,18 +258,19 @@ void PrintStack(std::stack<std::pair<int, int>> s) {
   std::cout << '\n';
 }
 
-int main() {
-  MazeModel A;
-  A.Generate(25, 10);
-  //   try {
-  //      std::stack<std::pair<int, int>> B = A.Solution(std::make_pair(0, 0),
-  //      std::make_pair(4, 4));
-  //   } catch (std::exception &e) {
-  //     std::cout << e.what() << std::endl;
-  //   }
-  std::stack<std::pair<int, int>> B =
-      A.Solution(std::make_pair(0, 0), std::make_pair(1, 9));
-  // A.PrintMatrix();
-  A.PrintLab();
-  PrintStack(B);
-}
+// int main() {
+//   MazeModel A;
+//   A.Generate(25, 10);
+//   //   try {
+//   //      std::stack<std::pair<int, int>> B = A.Solution(std::make_pair(0,
+//   0),
+//   //      std::make_pair(4, 4));
+//   //   } catch (std::exception &e) {
+//   //     std::cout << e.what() << std::endl;
+//   //   }
+//   std::stack<std::pair<int, int>> B =
+//       A.Solution(std::make_pair(0, 0), std::make_pair(1, 9));
+//   // A.PrintMatrix();
+//   A.PrintLab();
+//   PrintStack(B);
+// }

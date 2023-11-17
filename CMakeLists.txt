@@ -19,7 +19,10 @@ set(PROJECT_SOURCES
         src/view/maze_window.cc
         src/view/maze_window.h
         src/view/maze_window.ui
-)
+        src/controller/maze_controller.h
+        src/model/maze_model.h
+        src/model/maze_model.cc
+        src/helpers/data_objects.h)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(Maze

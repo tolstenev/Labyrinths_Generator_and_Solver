@@ -8,6 +8,7 @@ VIEW_SRC		:= ./src/view/maze_window.cc
 CONTROLLER_HDR	:=
 MODEL_HDR		:= ./src/model/maze_model.h
 MODEL_SRC		:= ./src/model/maze_model.cc
+HELPER_HDR		:= ./src/helpers/data_objects.h
 
 INSTALL_DIR 	:= $(HOME)/Desktop
 
@@ -16,6 +17,7 @@ SRCS			:= $(VIEW_HDR)       \
 			   	   $(CONTROLLER_HDR) \
 			   	   $(MODEL_HDR)      \
 			   	   $(MODEL_SRC)      \
+			   	   $(HELPER_HDR)     \
 			   	   $(MAIN)
 
 install: clean

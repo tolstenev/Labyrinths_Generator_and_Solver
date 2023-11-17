@@ -1,10 +1,14 @@
 #include <QApplication>
 
-#include "view/maze_window.h"
+#include "./controller/maze_controller.h"
+#include "./model/maze_model.h"
+#include "./view/maze_window.h"
 
 int main(int argc, char *argv[]) {
-  QApplication a(argc, argv);
-  s21::MazeWindow w;
-  w.show();
-  return a.exec();
+  QApplication app(argc, argv);
+  s21::MazeModel model;
+  s21::MazeController controller(model);
+  s21::MazeWindow view(controller);
+  view.show();
+  return app.exec();
 }

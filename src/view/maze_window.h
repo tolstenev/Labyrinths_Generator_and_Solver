@@ -3,17 +3,12 @@
 
 #include <QKeyEvent>
 #include <QMainWindow>
-#include <fstream>
-#include <iostream>
-
-#include "./ui_maze_window.h"
-//#include <QGraphicsView>
-//#include <QGraphicsScene>
-//#include <QLineF>
-//#include <QPen>
-#include <QFile>
 #include <QPainter>
-#include <QTextStream>
+#include <vector>
+
+#include "../controller/maze_controller.h"
+#include "../helpers/data_objects.h"
+#include "./ui_maze_window.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -27,14 +22,21 @@ class MazeWindow : public QMainWindow {
   Q_OBJECT
 
  public:
-  MazeWindow(QWidget *parent = nullptr);
+  MazeWindow(MazeController &controller, QWidget *parent = nullptr);
   ~MazeWindow();
 
   void keyPressEvent(QKeyEvent *event) override;
   void paintEvent(QPaintEvent *event) override;
 
+ private slots:
+  void Generate();
+
  private:
   Ui::MazeWindow *ui_;
+  MazeController &controller_;
+  Data data_{};
+
+  void ConnectSlots();
   void DrawBoarders(QPainter *painter) const;
   void DrawMaze(QPainter *painter) const;
 };

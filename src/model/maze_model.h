@@ -6,14 +6,9 @@
 #include <stack>
 #include <vector>
 
-namespace s21 {
+#include "../helpers/data_objects.h"
 
-struct Data {
-  int rows;
-  int cols;
-  std::vector<std::vector<bool>> matrix_right;
-  std::vector<std::vector<bool>> matrix_down;
-};
+namespace s21 {
 
 struct Cell {
   int set;
@@ -35,6 +30,7 @@ class MazeModel {
   ~MazeModel() = default;
 
   void Generate(int rows, int cols);
+  Data GetData() { return data_; };
   std::stack<std::pair<int, int>> Solution(std::pair<int, int> start,
                                            std::pair<int, int> finish);
 
