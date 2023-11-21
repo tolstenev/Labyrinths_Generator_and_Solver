@@ -4,7 +4,6 @@
 
 s21::MazeWindow::MazeWindow(MazeController &controller, QWidget *parent)
     : QMainWindow(parent), ui_(new Ui::MazeWindow), controller_(controller) {
-
   ui_->setupUi(this);
   setWindowTitle("Maze");
   ConnectSlots();
@@ -15,6 +14,8 @@ void s21::MazeWindow::ConnectSlots() {
 }
 
 void s21::MazeWindow::Generate() {
+  controller_.SetRows(ui_->sb_vertical_cells->value());
+  controller_.SetCols(ui_->sb_horizont_cells->value());
   data_ = controller_.Generate();
   repaint();
 }
@@ -39,19 +40,20 @@ void s21::MazeWindow::DrawBoarders(QPainter *painter) const {
 }
 
 void s21::MazeWindow::DrawMaze(QPainter *painter) const {
-  int start_x = 280;
-  int start_y = 20;
-  int size = 500;
+  double start_x = 280;
+  double start_y = 20;
+  double size = 500;
   double cell_width = size / data_.cols;
   double cell_height = size / data_.rows;
 
   for (int i = 0, end_i = data_.rows; i < end_i; ++i) {
     for (int j = 0, end_j = data_.cols - 1; j < end_j; ++j) {
       if (data_.matrix_right[i][j]) {
-        int x = (j + 1) * cell_width;
-        int y1 = i * cell_height;
-        int y2 = (i + 1) * cell_height;
-        painter->drawLine(start_x + x, start_y + y1, start_x + x, start_y + y2);
+        double x = (j + 1) * cell_width;
+        double y1 = i * cell_height;
+        double y2 = (i + 1) * cell_height;
+        painter->drawLine(std::round(start_x + x), std::round(start_y + y1),
+                          std::round(start_x + x), std::round(start_y + y2));
       }
     }
   }
@@ -59,10 +61,11 @@ void s21::MazeWindow::DrawMaze(QPainter *painter) const {
   for (int i = 0, end_i = data_.rows - 1; i < end_i; ++i) {
     for (int j = 0, end_j = data_.cols; j < end_j; ++j) {
       if (data_.matrix_down[i][j]) {
-        int x1 = j * cell_width;
-        int x2 = (j + 1) * cell_width;
-        int y = (i + 1) * cell_height;
-        painter->drawLine(start_x + x1, start_y + y, start_x + x2, start_y + y);
+        double x1 = j * cell_width;
+        double x2 = (j + 1) * cell_width;
+        double y = (i + 1) * cell_height;
+        painter->drawLine(std::round(start_x + x1), std::round(start_y + y),
+                          std::round(start_x + x2), std::round(start_y + y));
       }
     }
   }

@@ -10,9 +10,16 @@ class MazeController {
   MazeController(MazeModel &m) : model_(m) {};
 
   Data Generate() {
-    model_.Generate(25, 25);
+    model_.Generate(/*25, 25*/);
     return model_.GetData();
   };
+
+  void SetRows(int rows) { model_.SetRows(rows); };
+  void SetCols(int cols) { model_.SetCols(cols); };
+
+//  1. Добавить сеттеры для рядов
+//  2. для колонок
+
 
  private:
   MazeModel &model_;

@@ -2,23 +2,23 @@
 
 using namespace s21;
 
-void MazeModel::Generate(int rows, int cols) {
-  SetRows(rows);
-  SetCols(cols);
-  SizeMatrix(rows, cols);
-  std::vector<Cell> str(cols);
+void MazeModel::Generate(/*int rows, int cols*/) {
+  //  SetRows(rows);
+  //  SetCols(cols);
+  SizeMatrix(data_.rows, data_.cols);
+  std::vector<Cell> str(data_.cols);
   int set_count = 1;
-  for (int i = 0; i < cols; i++) {
+  for (int i = 0; i < data_.cols; i++) {
     str[i].set = set_count;
     set_count++;
   }
-  for (int n = 0; n < rows; n++) {
+  for (int n = 0; n < data_.rows; n++) {
     RightWall(str);
     DownWall(str);
 
-    if (n == rows - 1) LastStr(str);
+    if (n == data_.rows - 1) LastStr(str);
     CopyString(str, n);
-    if (n < rows - 1) NextStr(str, &set_count);
+    if (n < data_.rows - 1) NextStr(str, &set_count);
   }
 }
 

@@ -29,7 +29,7 @@ class MazeModel {
   MazeModel() = default;
   ~MazeModel() = default;
 
-  void Generate(int rows, int cols);
+  void Generate(/*int rows, int cols*/);
   Data GetData() { return data_; };
   std::stack<std::pair<int, int>> Solution(std::pair<int, int> start,
                                            std::pair<int, int> finish);
