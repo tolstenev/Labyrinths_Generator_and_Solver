@@ -31,8 +31,8 @@ class MazeModel {
 
   void Generate(/*int rows, int cols*/);
   Data GetData() { return data_; };
-  std::stack<std::pair<int, int>> Solution(std::pair<int, int> start,
-                                           std::pair<int, int> finish);
+  void Solution(std::pair<int, int> start, std::pair<int, int> finish);
+  std::stack<std::pair<int, int>> GetWay();
 
   void SetRows(int rows);
   void SetCols(int cols);
@@ -52,7 +52,7 @@ class MazeModel {
   std::vector<std::vector<Finder>> InitLab();
   int Wave(std::vector<std::vector<Finder>> *lab, std::pair<int, int> start,
            std::pair<int, int> finish);
-  std::stack<std::pair<int, int>> FindWay(std::vector<std::vector<Finder>> lab,
+  void FindWay(std::vector<std::vector<Finder>> lab,
                                           int n, std::pair<int, int> start,
                                           std::pair<int, int> finish);
 };

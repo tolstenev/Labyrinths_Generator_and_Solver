@@ -10,6 +10,7 @@ struct Data {
   int cols = 1;
   std::vector<std::vector<bool>> matrix_right{};
   std::vector<std::vector<bool>> matrix_down{};
+  std::stack<std::pair<int, int>> way{};
 };
 
 }  // namespace s21
