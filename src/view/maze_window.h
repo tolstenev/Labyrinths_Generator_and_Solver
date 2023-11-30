@@ -30,15 +30,22 @@ class MazeWindow : public QMainWindow {
 
  private slots:
   void Generate();
+  void Solve();
 
  private:
   Ui::MazeWindow *ui_;
   MazeController &controller_;
   Data data_{};
+  const double start_x_{280};
+  const double start_y_{20};
+  const double size_{500};
+  double cell_width_{};
+  double cell_height_{};
 
   void ConnectSlots();
-  void DrawBoarders(QPainter *painter) const;
-  void DrawMaze(QPainter *painter) const;
+  void DrawBoarders(QPainter *painter);
+  void DrawMaze(QPainter *painter);
+  void DrawSolving(QPainter *painter);
 };
 
 }  // namespace s21

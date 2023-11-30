@@ -7,19 +7,21 @@ namespace s21 {
 
 class MazeController {
  public:
-  MazeController(MazeModel &m) : model_(m) {};
+  MazeController(MazeModel &m) : model_(m){};
 
   Data Generate() {
-    model_.Generate(/*25, 25*/);
+    model_.Generate();
     return model_.GetData();
   };
 
   void SetRows(int rows) { model_.SetRows(rows); };
   void SetCols(int cols) { model_.SetCols(cols); };
 
-//  1. Добавить сеттеры для рядов
-//  2. для колонок
-
+  std::stack<std::pair<int, int>> GetWay(std::pair<int, int> start,
+                                         std::pair<int, int> finish) {
+    model_.Solution(start, finish);
+    return model_.GetWay();
+  };
 
  private:
   MazeModel &model_;
@@ -28,4 +30,4 @@ class MazeController {
 
 }  // namespace s21
 
-#endif //MAZE_CONTROLLER_MAZE_CONTROLLER_H_
+#endif  // MAZE_CONTROLLER_MAZE_CONTROLLER_H_

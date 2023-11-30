@@ -104,7 +104,7 @@
      <string>vertical</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="bt_generate_2">
+   <widget class="QPushButton" name="bt_import">
     <property name="geometry">
      <rect>
       <x>50</x>
@@ -117,7 +117,7 @@
      <string>Import</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="bt_generate_3">
+   <widget class="QPushButton" name="bt_export">
     <property name="geometry">
      <rect>
       <x>50</x>
@@ -130,7 +130,7 @@
      <string>Export</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="bt_generate_4">
+   <widget class="QPushButton" name="bt_solve">
     <property name="geometry">
      <rect>
       <x>50</x>
