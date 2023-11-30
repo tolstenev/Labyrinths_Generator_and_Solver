@@ -33,6 +33,7 @@ class MazeModel {
   Data GetData() { return data_; };
   void Solution(std::pair<int, int> start, std::pair<int, int> finish);
   std::stack<std::pair<int, int>> GetWay();
+    void ClearWay();
 
   void SetRows(int rows);
   void SetCols(int cols);
@@ -55,7 +56,6 @@ class MazeModel {
            std::pair<int, int> finish);
   void FindWay(std::vector<std::vector<Finder>> lab, int n,
                std::pair<int, int> start, std::pair<int, int> finish);
-  void ClearWay();
 };
 
 }  // namespace s21

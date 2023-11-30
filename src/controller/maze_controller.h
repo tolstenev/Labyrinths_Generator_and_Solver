@@ -23,6 +23,10 @@ class MazeController {
     return model_.GetWay();
   };
 
+  void ClearWay() {
+      model_.ClearWay();
+  }
+
  private:
   MazeModel &model_;
 

@@ -27,6 +27,7 @@ class MazeWindow : public QMainWindow {
 
   void keyPressEvent(QKeyEvent *event) override;
   void paintEvent(QPaintEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent* event) override;
 
  private slots:
   void Generate();
@@ -41,11 +42,13 @@ class MazeWindow : public QMainWindow {
   const double size_{500};
   double cell_width_{};
   double cell_height_{};
+  bool show_way_ = false;
 
   void ConnectSlots();
   void DrawBoarders(QPainter *painter);
   void DrawMaze(QPainter *painter);
   void DrawSolving(QPainter *painter);
+    void Clear();
 };
 
 }  // namespace s21
