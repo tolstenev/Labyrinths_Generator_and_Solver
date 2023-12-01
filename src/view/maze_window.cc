@@ -13,6 +13,16 @@ void s21::MazeWindow::ConnectSlots() {
   connect(ui_->bt_generate, &QPushButton::clicked, this, &MazeWindow::Generate);
 //  connect(ui_->bt_solve, &QPushButton::clicked, this, &MazeWindow::Solve);
   connect(ui_->bt_clear, &QPushButton::clicked, this, &MazeWindow::Clear);
+  connect(ui_->bt_import, &QPushButton::clicked, this, &MazeWindow::Import);
+  connect(ui_->bt_export, &QPushButton::clicked, this, &MazeWindow::Export);
+}
+
+void s21::MazeWindow Import() {
+
+}
+
+void s21::MazeWindow Export() {
+  
 }
 
 void s21::MazeWindow::Generate() {

@@ -6,6 +6,9 @@
 #include <stack>
 #include <vector>
 
+#include <string>
+#include <fstream>// для std::getline
+
 #include "../helpers/data_objects.h"
 
 namespace s21 {
@@ -56,6 +59,25 @@ class MazeModel {
            std::pair<int, int> finish);
   void FindWay(std::vector<std::vector<Finder>> lab, int n,
                std::pair<int, int> start, std::pair<int, int> finish);
+};
+
+class Parser {
+ public:
+  static Parser& GetInstance() {
+    static Parser instance;
+    return instance;
+  }
+
+  void ParseIndices(const std::string path_to_file);
+
+  std::vector<int>& GetIndices();
+
+ private:
+  Parser() {}
+  Parser(const Parser&);
+  void operator=(Parser&);
+
+  std::vector<int> indices_;
 };
 
 }  // namespace s21

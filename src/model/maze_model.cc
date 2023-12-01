@@ -266,22 +266,87 @@ void MazeModel::PrintStack() {
   std::cout << '\n';
 }
 
-//  }
-// int main() {
-//   MazeModel A;
-//   A.SetRows(50);
-//   A.SetCols(50);
-//   A.Generate();
-//   //   try {
-//   //      std::stack<std::pair<int, int>> B = A.Solution(std::make_pair(0,
-//   // 0),
-//   //      std::make_pair(4, 4));
-//   //   } catch (std::exception &e) {
-//   //     std::cout << e.what() << std::endl;
-//   //   }
-//   // std::stack<std::pair<int, int>> B =
-//   A.Solution(std::make_pair(0, 0), std::make_pair(1, 9));
-//   // A.PrintMatrix();
-//   A.PrintLab();
-//   PrintStack(A.GetWay());
-// }
+//parser
+//int rows = 1;
+// int cols = 1;
+// std::vector<std::vector<bool>> matrix_right{};
+// std::vector<std::vector<bool>> matrix_down{};
+void Parser::ParseIndices(const std::string path_to_file) {
+  std::ifstream file("maze.txt"); // окрываем файл для чтения
+  if (file.is_open()) {
+    int last_elem = 0;
+    std::string current_string;
+    while (std::getline(file, current_string)) {
+      // if (current_string[0] == 'f' && current_string[1] == ' ') {
+      //   int counter = 0;
+      //   for (size_t i = 0; i < current_string.length(); i++) {
+      //     if (current_string[i] == ' ' &&
+      //         (current_string[i + 1] >= '0' && current_string[i + 1] <= '9')) {
+      //       int current_num;
+      //       std::string num;
+      //       i++;
+      //       int j = 0;
+      //       while (current_string[i] != '/' && current_string[i] != ' ' &&
+      //              current_string[i] != '\0') {
+      //         num[j] = current_string[i];
+      //         j++, i++;
+      //       }
+      //       current_num = std::stoi(num);
+      //       if (counter == 0) {
+      //         last_elem = current_num;
+      //         indices_.push_back(current_num);
+      //       } else {
+      //         counter == 1 ? (indices_.push_back(current_num))
+      //                      : (void)(indices_.back() = current_num);
+      //         indices_.push_back(current_num);
+      //         indices_.push_back(last_elem);
+      //       }
+      //       counter++;
+      //     }
+      //   }
+      // }
+    }
+    file.close();
+  } else {
+    throw std::invalid_argument("Error! File Not Found!");
+  }
+}
+
+int main() {
+  // MazeModel A;
+  // A.SetRows(10);
+  // A.SetCols(10);
+  // A.Generate();
+  // //   try {
+  // //      std::stack<std::pair<int, int>> B = A.Solution(std::make_pair(0,
+  // // 0),
+  // //      std::make_pair(4, 4));
+  // //   } catch (std::exception &e) {
+  // //     std::cout << e.what() << std::endl;
+  // //   }
+  // // std::stack<std::pair<int, int>> B =
+  // A.Solution(std::make_pair(0, 0), std::make_pair(9, 9));
+  // A.PrintMatrix();
+  // //A.PrintLab();
+  //A.PrintStack();
+  std::string line;
+ 
+    std::ifstream in("maze.txt"); // окрываем файл для чтения
+    if (in.is_open())
+    {
+        while (std::getline(in, line))
+        {
+          
+          //if (line[0] = ' ') {
+            std::cout << line << std::endl;
+            
+//}
+        }
+    }
+    in.close();
+
+}
+
+//parser// open file
+//getline
+//

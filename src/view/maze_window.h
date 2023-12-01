@@ -32,6 +32,8 @@ class MazeWindow : public QMainWindow {
  private slots:
   void Generate();
   void Solve();
+  void Import();
+  void Export();
 
  private:
   Ui::MazeWindow *ui_;
