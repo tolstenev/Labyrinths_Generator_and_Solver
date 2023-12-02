@@ -70,6 +70,7 @@ class Parser {
   }
 
   void ParseImport(const std::string path_to_file);
+  void ParseExport(const std::string path_to_file);
   Data GetData() { return data_; };
 
   //std::vector<int>& GetIndices();

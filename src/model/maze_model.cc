@@ -241,6 +241,22 @@ void MazeModel::PrintLab() {
   }
 }
 
+void MazeModel::PrintMatrix() {
+  for (int i = 0; i < data_.rows; i++) {
+    for (int j = 0; j < data_.cols; j++) {
+      std::cout << data_.matrix_right[i][j] << " ";
+    }
+    std::cout << std::endl;
+  }
+  std::cout << std::endl;
+  for (int i = 0; i < data_.rows; i++) {
+    for (int j = 0; j < data_.cols; j++) {
+      std::cout << data_.matrix_down[i][j] << " ";
+    }
+    std::cout << std::endl;
+  }
+}
+
 void MazeModel::PrintStack() {
   auto s = data_.way;
   while (!s.empty()) {
@@ -320,29 +336,50 @@ void Parser::ParseImport(const std::string path_to_file) {
   file.close();
 }
 
-void MazeModel::PrintMatrix() {
-  for (int i = 0; i < data_.rows; i++) {
-    for (int j = 0; j < data_.cols; j++) {
-      std::cout << data_.matrix_right[i][j] << " ";
-    }
-    std::cout << std::endl;
-  }
-  std::cout << std::endl;
-  for (int i = 0; i < data_.rows; i++) {
-    for (int j = 0; j < data_.cols; j++) {
-      std::cout << data_.matrix_down[i][j] << " ";
-    }
-    std::cout << std::endl;
-  }
-}
+void Parser::ParseExport(const std::string path_to_file) {
+  std::ofstream out;          // поток для записи
+  out.open("hello.txt");      // открываем файл для записи
 
+   MazeModel maze;
+  
+   maze.SetRows(5);
+   maze.SetCols(5);
+   maze.Generate();
+   Data data_tmp = maze.GetData();
+
+   if (out.is_open())
+    { 
+      out << data_tmp.rows << ' ' << data_tmp.cols << std::endl;
+      for (int i = 0; i < data_tmp.rows; i++) {
+        for (int j = 0; j < data_tmp.cols; j++) {
+          out << data_tmp.matrix_right[i][j] << " ";
+        }
+        out << std::endl;
+      }
+      out << std::endl;
+      for (int i = 0; i < data_tmp.rows; i++) {
+        for (int j = 0; j < data_tmp.cols; j++) {
+          out << data_tmp.matrix_down[i][j] << " ";
+        }
+        out << std::endl;
+      }
+    out.close();
+    }
+    // maze.PrintMatrix();
+}
 
 int main() {
   s21::Parser &parser = s21::Parser::GetInstance();
   const std::string path_to_file = "maze.txt";
-  parser.ParseImport(path_to_file);
-  MazeModel maze;
-  Data data = parser.GetData();
-  maze.SetData(data);
-  maze.PrintMatrix();
+  //parser.ParseImport(path_to_file);
+  
+  //Data data = parser.GetData();
+  //maze.SetData(data);
+  // MazeModel maze;
+  // maze.SetRows(5);
+  // maze.SetCols(5);
+  
+  parser.ParseExport(path_to_file);
+  //maze.Generate();
+  //maze.PrintMatrix();
 }
