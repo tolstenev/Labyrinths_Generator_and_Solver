@@ -340,6 +340,7 @@ void Parser::ParseExport(const std::string path_to_file) {
   std::ofstream out;          // поток для записи
   out.open("hello.txt");      // открываем файл для записи
 
+  // Генерация матриц для тестирования
    MazeModel maze;
   
    maze.SetRows(5);
@@ -349,7 +350,9 @@ void Parser::ParseExport(const std::string path_to_file) {
 
    if (out.is_open())
     { 
+      // introduction of the first line
       out << data_tmp.rows << ' ' << data_tmp.cols << std::endl;
+      // input of the first matrix
       for (int i = 0; i < data_tmp.rows; i++) {
         for (int j = 0; j < data_tmp.cols; j++) {
           out << data_tmp.matrix_right[i][j] << " ";
@@ -357,6 +360,7 @@ void Parser::ParseExport(const std::string path_to_file) {
         out << std::endl;
       }
       out << std::endl;
+      // input of the second matrix
       for (int i = 0; i < data_tmp.rows; i++) {
         for (int j = 0; j < data_tmp.cols; j++) {
           out << data_tmp.matrix_down[i][j] << " ";
