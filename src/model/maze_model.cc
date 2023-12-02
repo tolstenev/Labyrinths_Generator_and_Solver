@@ -228,12 +228,12 @@ void MazeModel::PrintMatrix() {
     std::cout << std::endl;
   }
   std::cout << std::endl;
-  for (int i = 0; i < data_.rows; i++) {
-    for (int j = 0; j < data_.cols; j++) {
-      std::cout << data_.matrix_down[i][j] << " ";
-    }
-    std::cout << std::endl;
-  }
+  // for (int i = 0; i < data_.rows; i++) {
+  //   for (int j = 0; j < data_.cols; j++) {
+  //     std::cout << data_.matrix_down[i][j] << " ";
+  //   }
+  //   std::cout << std::endl;
+  // }
 }
 
 void MazeModel::PrintLab() {
@@ -267,86 +267,58 @@ void MazeModel::PrintStack() {
 }
 
 //parser
-//int rows = 1;
-// int cols = 1;
-// std::vector<std::vector<bool>> matrix_right{};
-// std::vector<std::vector<bool>> matrix_down{};
-void Parser::ParseIndices(const std::string path_to_file) {
+void Parser::ParseImport(const std::string path_to_file) {
+  std::string line;
   std::ifstream file("maze.txt"); // окрываем файл для чтения
-  if (file.is_open()) {
-    int last_elem = 0;
-    std::string current_string;
-    while (std::getline(file, current_string)) {
-      // if (current_string[0] == 'f' && current_string[1] == ' ') {
-      //   int counter = 0;
-      //   for (size_t i = 0; i < current_string.length(); i++) {
-      //     if (current_string[i] == ' ' &&
-      //         (current_string[i + 1] >= '0' && current_string[i + 1] <= '9')) {
-      //       int current_num;
-      //       std::string num;
-      //       i++;
-      //       int j = 0;
-      //       while (current_string[i] != '/' && current_string[i] != ' ' &&
-      //              current_string[i] != '\0') {
-      //         num[j] = current_string[i];
-      //         j++, i++;
-      //       }
-      //       current_num = std::stoi(num);
-      //       if (counter == 0) {
-      //         last_elem = current_num;
-      //         indices_.push_back(current_num);
-      //       } else {
-      //         counter == 1 ? (indices_.push_back(current_num))
-      //                      : (void)(indices_.back() = current_num);
-      //         indices_.push_back(current_num);
-      //         indices_.push_back(last_elem);
-      //       }
-      //       counter++;
-      //     }
-      //   }
-      // }
+
+  if (file.is_open())
+  {
+    int i = 0;
+    int x = 0;
+    int count = 0;
+    char* pEnd;
+    while (std::getline(file, line))
+    {
+      if (i == 0) {
+        data_.rows = std::strtof(line.c_str(), &pEnd);
+        data_.cols = std::strtof(pEnd, NULL);
+        // std::cout << std::strtof(line.c_str(), &pEnd) << std::endl; // первый символ в первой строке
+        // std::cout << std::strtof(pEnd, NULL) << std::endl; // второй символ в первой строчке
+        i++;
+      } else {
+        if (line.size() == 0) {
+          x = 0;
+          count++;
+        } else if (count = 0) {
+          for (int y = 0; y < line.size();y++) {
+            if (line[y] != ' ') {
+              bool value = line[y];
+              data_.matrix_right[x].push_back(value);
+              // std::cout << "[" << x << "][" << y / 2 << "] " << line[y] << std::endl; // вывод 1 матрицы
+            }
+          }
+          x++;
+        } else {
+          for (int y = 0; y < line.size();y++) {
+            if (line[y] != ' ') {
+              //data_.matrix_down[x][y] = line[y];
+              // std::cout << "[" << x << "][" << y / 2 << "] " << line[y] << std::endl; // вывод 2 матрицы
+            }
+          }
+          x++;
+        }
+      }
     }
-    file.close();
-  } else {
-    throw std::invalid_argument("Error! File Not Found!");
   }
+  file.close();
 }
 
 int main() {
-  // MazeModel A;
-  // A.SetRows(10);
-  // A.SetCols(10);
-  // A.Generate();
-  // //   try {
-  // //      std::stack<std::pair<int, int>> B = A.Solution(std::make_pair(0,
-  // // 0),
-  // //      std::make_pair(4, 4));
-  // //   } catch (std::exception &e) {
-  // //     std::cout << e.what() << std::endl;
-  // //   }
-  // // std::stack<std::pair<int, int>> B =
-  // A.Solution(std::make_pair(0, 0), std::make_pair(9, 9));
-  // A.PrintMatrix();
-  // //A.PrintLab();
-  //A.PrintStack();
-  std::string line;
- 
-    std::ifstream in("maze.txt"); // окрываем файл для чтения
-    if (in.is_open())
-    {
-        while (std::getline(in, line))
-        {
-          
-          //if (line[0] = ' ') {
-            std::cout << line << std::endl;
-            
-//}
-        }
-    }
-    in.close();
-
+  s21::Parser &parser = s21::Parser::GetInstance();
+  const std::string path_to_file = "maze.txt";
+  parser.ParseImport(path_to_file);
+  MazeModel maze;
+  Data data = parser.GetData();
+  maze.SetData(data);
+  maze.PrintMatrix();
 }
-
-//parser// open file
-//getline
-//

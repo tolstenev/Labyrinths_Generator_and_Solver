@@ -6,8 +6,8 @@
 #include <stack>
 #include <vector>
 
-#include <string>
-#include <fstream>// для std::getline
+#include <string> // подключаем строки
+#include <fstream> // для std::getline
 
 #include "../helpers/data_objects.h"
 
@@ -34,6 +34,7 @@ class MazeModel {
 
   void Generate(/*int rows, int cols*/);
   Data GetData() { return data_; };
+  void SetData(Data data) { data_ = data; }
   void Solution(std::pair<int, int> start, std::pair<int, int> finish);
   std::stack<std::pair<int, int>> GetWay();
     void ClearWay();
@@ -68,16 +69,17 @@ class Parser {
     return instance;
   }
 
-  void ParseIndices(const std::string path_to_file);
+  void ParseImport(const std::string path_to_file);
+  Data GetData() { return data_; };
 
-  std::vector<int>& GetIndices();
+  //std::vector<int>& GetIndices();
 
  private:
   Parser() {}
   Parser(const Parser&);
-  void operator=(Parser&);
-
-  std::vector<int> indices_;
+  //void operator=(Parser&);
+  Data data_;
+  //std::vector<int> indices_;
 };
 
 }  // namespace s21
