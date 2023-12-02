@@ -220,22 +220,6 @@ void MazeModel::FindWay(std::vector<std::vector<Finder>> lab, int n,
 
 std::stack<std::pair<int, int>> MazeModel::GetWay() { return data_.way; }
 
-void MazeModel::PrintMatrix() {
-  for (int i = 0; i < data_.rows; i++) {
-    for (int j = 0; j < data_.cols; j++) {
-      std::cout << data_.matrix_right[i][j] << " ";
-    }
-    std::cout << std::endl;
-  }
-  std::cout << std::endl;
-  // for (int i = 0; i < data_.rows; i++) {
-  //   for (int j = 0; j < data_.cols; j++) {
-  //     std::cout << data_.matrix_down[i][j] << " ";
-  //   }
-  //   std::cout << std::endl;
-  // }
-}
-
 void MazeModel::PrintLab() {
   for (int i = 0; i < data_.cols; i++) std::cout << "__";
   std::cout << std::endl;
@@ -279,39 +263,79 @@ void Parser::ParseImport(const std::string path_to_file) {
     char* pEnd;
     while (std::getline(file, line))
     {
+      // process first line
       if (i == 0) {
         data_.rows = std::strtof(line.c_str(), &pEnd);
         data_.cols = std::strtof(pEnd, NULL);
         // std::cout << std::strtof(line.c_str(), &pEnd) << std::endl; // первый символ в первой строке
         // std::cout << std::strtof(pEnd, NULL) << std::endl; // второй символ в первой строчке
         i++;
-      } else {
-        if (line.size() == 0) {
-          x = 0;
-          count++;
-        } else if (count = 0) {
-          for (int y = 0; y < line.size();y++) {
-            if (line[y] != ' ') {
-              bool value = line[y];
-              data_.matrix_right[x].push_back(value);
-              // std::cout << "[" << x << "][" << y / 2 << "] " << line[y] << std::endl; // вывод 1 матрицы
+        continue;
+      }
+
+      // goto next matrix
+      if (line.size() == 0) {
+        x = 0;
+        count++;
+        continue;
+      }
+
+      // process right matrix
+      if (count == 0) {
+        std::vector<bool> rm_tmp;
+        for (int y = 0; y < line.size();y++) {
+          if (line[y] != ' ') {
+            // bool 1 and 0 
+            if (line[y] == '1') {
+              rm_tmp.push_back(true);
+            } else {
+              rm_tmp.push_back(false);
             }
+            // std::cout << "[" << x << "][" << y / 2 << "] " << line[y] << std::endl; // вывод 1 матрицы
           }
-          x++;
-        } else {
-          for (int y = 0; y < line.size();y++) {
-            if (line[y] != ' ') {
-              //data_.matrix_down[x][y] = line[y];
-              // std::cout << "[" << x << "][" << y / 2 << "] " << line[y] << std::endl; // вывод 2 матрицы
+        }
+        data_.matrix_right.push_back(rm_tmp);
+        x++;
+        continue;
+      } 
+      
+      // process down matrix
+      std::vector<bool> dm_tmp;
+      for (int y = 0; y < line.size();y++) {
+        if (line[y] != ' ') {
+          // bool 1 and 0 
+            if (line[y] == '1') {
+              dm_tmp.push_back(true);
+            } else {
+              dm_tmp.push_back(false);
             }
-          }
-          x++;
+          // std::cout << "[" << x << "][" << y / 2 << "] " << line[y] << std::endl; // вывод 2 матрицы
         }
       }
+      data_.matrix_down.push_back(dm_tmp);
+      x++;
+
     }
   }
   file.close();
 }
+
+void MazeModel::PrintMatrix() {
+  for (int i = 0; i < data_.rows; i++) {
+    for (int j = 0; j < data_.cols; j++) {
+      std::cout << data_.matrix_right[i][j] << " ";
+    }
+    std::cout << std::endl;
+  }
+  std::cout << std::endl;
+  for (int i = 0; i < data_.rows; i++) {
+    for (int j = 0; j < data_.cols; j++) {
+      std::cout << data_.matrix_down[i][j] << " ";
+    }
+    std::cout << std::endl;
+  }
+}
+
 
 int main() {
   s21::Parser &parser = s21::Parser::GetInstance();
