@@ -335,70 +335,70 @@ void Parser::ParseImportValidator(const std::string path_to_file) {
 void Parser::ParseImport(const std::string path_to_file) {
   std::string line;
   // Передача файла через path_to_file
-  std::ifstream file("maze.txt"); // окрываем файл для чтения
+  std::ifstream file(path_to_file); // окрываем файл для чтения
 
-  if (file.is_open())
+  if (!file.is_open()) {
+    throw std::invalid_argument("Error! File Not Found!");
+  }
+  int lines_count = 0;
+  int count = 0;
+  char* pEnd;
+  
+  while (std::getline(file, line))
   {
-    int lines_count = 0;
-    //int x = 0;
-    int count = 0;
-    char* pEnd;
-    
-    while (std::getline(file, line))
-    {
-      // process first line
-      if (lines_count == 0) {
-        data_.rows = std::strtof(line.c_str(), &pEnd);
-        data_.cols = std::strtof(pEnd, NULL);
-        // std::cout << std::strtof(line.c_str(), &pEnd) << std::endl; // первый символ в первой строке
-        // std::cout << std::strtof(pEnd, NULL) << std::endl; // второй символ в первой строчке
-        lines_count++;
-        continue;
-      }
+    // process first line
+    if (lines_count == 0) {
+      data_.rows = std::strtof(line.c_str(), &pEnd);
+      data_.cols = std::strtof(pEnd, NULL);
+      // std::cout << std::strtof(line.c_str(), &pEnd) << std::endl; // первый символ в первой строке
+      // std::cout << std::strtof(pEnd, NULL) << std::endl; // второй символ в первой строчке
+      lines_count++;
+      continue;
+    }
 
-      // goto next matrix
-      if (line.size() == 0) {
-        //x = 0;
-        count++;
-        continue;
-      }
+    // goto next matrix
+    if (line.size() == 0) {
+      //x = 0;
+      count++;
+      continue;
+    }
 
-      // process right matrix
-      if (count == 0) {
-        std::vector<bool> rm_tmp;
-        for (int y = 0; y < line.size();y++) {
-          if (line[y] != ' ') {
-            // bool 1 and 0 
-            if (line[y] == '1') {
-              rm_tmp.push_back(true);
-            } else {
-              rm_tmp.push_back(false);
-            }
-            // std::cout << "[" << x << "][" << y / 2 << "] " << line[y] << std::endl; // вывод 1 матрицы
-          }
-        }
-        data_.matrix_right.push_back(rm_tmp);
-        //x++;
-        continue;
-      } 
-      
-      // process down matrix
-      std::vector<bool> dm_tmp;
-      for (int y = 0; y < line.size();y++) {
+    // process right matrix
+    if (count == 0) {
+      std::vector<bool> rm_tmp;
+      for (size_t y = 0; y < line.size();y++) {
         if (line[y] != ' ') {
           // bool 1 and 0 
-            if (line[y] == '1') {
-              dm_tmp.push_back(true);
-            } else {
-              dm_tmp.push_back(false);
-            }
-          // std::cout << "[" << x << "][" << y / 2 << "] " << line[y] << std::endl; // вывод 2 матрицы
+          if (line[y] == '1') {
+            rm_tmp.push_back(true);
+          } else {
+            rm_tmp.push_back(false);
+          }
+          // std::cout << "[" << x << "][" << y / 2 << "] " << line[y] << std::endl; // вывод 1 матрицы
         }
       }
-      data_.matrix_down.push_back(dm_tmp);
+      data_.matrix_right.push_back(rm_tmp);
       //x++;
+      continue;
+    } 
+    
+    // process down matrix
+    std::vector<bool> dm_tmp;
+    for (size_t y = 0; y < line.size();y++) {
+      if (line[y] != ' ') {
+        // bool 1 and 0 
+          if (line[y] == '1') {
+            dm_tmp.push_back(true);
+          } else {
+            dm_tmp.push_back(false);
+          }
+        // std::cout << "[" << x << "][" << y / 2 << "] " << line[y] << std::endl; // вывод 2 матрицы
+      }
     }
+    data_.matrix_down.push_back(dm_tmp);
+    //x++;
   }
+
   file.close();
 }
 
@@ -416,7 +416,7 @@ void Parser::ParseExport(const std::string path_to_file) {
    Data data_tmp = maze.GetData();
 
    if (out.is_open())
-    { 
+    {
       // introduction of the first line
       out << data_tmp.rows << ' ' << data_tmp.cols << std::endl;
       // input of the first matrix
@@ -439,20 +439,19 @@ void Parser::ParseExport(const std::string path_to_file) {
     // maze.PrintMatrix();
 }
 
-int main() {
-  s21::Parser &parser = s21::Parser::GetInstance();
-  const std::string path_to_file = "maze.txt";
-  parser.ParseImportValidator(path_to_file);
-  //std::cout << "validator end" << std::endl;
-  MazeModel maze;
-  Data data = parser.GetData();
-  maze.SetData(data);
+// int main() {
+//   s21::Parser &parser = s21::Parser::GetInstance();
+//   const std::string path_to_file = "maze3x3.txt";
+//   //parser.ParseImportValidator(path_to_file);
+//   //std::cout << "validator end" << std::endl;
+//   MazeModel maze;
+//   parser.ParseImport(path_to_file);
+//   Data data = parser.GetData();
+//   maze.SetData(data);
+//   // maze.SetRows(3);
+//   // maze.SetCols(3);
   
-   //MazeModel maze;
-  // maze.SetRows(5);
-  // maze.SetCols(5);
-  
-  //parser.ParseExport(path_to_file);
-  //maze.Generate();
-  
-}
+//   //parser.ParseExport(path_to_file);
+//   // maze.Generate();
+//   maze.PrintMatrix();
+// }
