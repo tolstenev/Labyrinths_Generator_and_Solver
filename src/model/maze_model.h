@@ -6,6 +6,9 @@
 #include <stack>
 #include <vector>
 
+#include <string> // подключаем строки
+#include <fstream> // для std::getline
+
 #include "../helpers/data_objects.h"
 
 namespace s21 {
@@ -31,13 +34,16 @@ class MazeModel {
 
   void Generate(/*int rows, int cols*/);
   Data GetData() { return data_; };
+  void SetData(Data data) { data_ = data; }
   void Solution(std::pair<int, int> start, std::pair<int, int> finish);
   std::stack<std::pair<int, int>> GetWay();
+    void ClearWay();
 
   void SetRows(int rows);
   void SetCols(int cols);
   void PrintMatrix();
   void PrintLab();
+  void PrintStack();
 
  private:
   Data data_;
@@ -52,9 +58,30 @@ class MazeModel {
   std::vector<std::vector<Finder>> InitLab();
   int Wave(std::vector<std::vector<Finder>> *lab, std::pair<int, int> start,
            std::pair<int, int> finish);
-  void FindWay(std::vector<std::vector<Finder>> lab,
-                                          int n, std::pair<int, int> start,
-                                          std::pair<int, int> finish);
+  void FindWay(std::vector<std::vector<Finder>> lab, int n,
+               std::pair<int, int> start, std::pair<int, int> finish);
+};
+
+class Parser {
+ public:
+  static Parser& GetInstance() {
+    static Parser instance;
+    return instance;
+  }
+
+  void ParseImportValidator(const std::string path_to_file);
+  void ParseImport(const std::string path_to_file);
+  void ParseExport(const std::string path_to_file);
+  Data GetData() { return data_; };
+
+  //std::vector<int>& GetIndices();
+
+ private:
+  Parser() {}
+  Parser(const Parser&);
+  //void operator=(Parser&);
+  Data data_;
+  //std::vector<int> indices_;
 };
 
 }  // namespace s21
