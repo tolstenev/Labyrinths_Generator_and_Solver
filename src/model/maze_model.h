@@ -69,6 +69,7 @@ class Parser {
     return instance;
   }
 
+  void ParseImportValidator(const std::string path_to_file);
   void ParseImport(const std::string path_to_file);
   void ParseExport(const std::string path_to_file);
   Data GetData() { return data_; };

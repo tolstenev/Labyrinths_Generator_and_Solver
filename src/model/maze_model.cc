@@ -267,31 +267,98 @@ void MazeModel::PrintStack() {
 }
 
 //parser
+
+void Parser::ParseImportValidator(const std::string path_to_file) {
+  std::string line;
+  // Передача файла через path_to_file
+  std::ifstream file("maze.txt");
+  
+  if (!file.is_open()) {
+    throw std::invalid_argument("Error! File Not Found!");
+  }
+  // variables for checking data in a file
+  int rows = 0;
+  int cols = 0;
+  int rows_first_matrix = 0;
+  int rows_second_matrix = 0;
+
+  int first_line = 0;
+  int count = 0;
+  char* pEnd;
+
+  // loop for writing values ​​to check
+  while (std::getline(file, line))
+  { 
+    if (first_line == 0) {
+      rows = std::strtof(line.c_str(), &pEnd);
+      cols = std::strtof(pEnd, NULL);
+      //std::cout << rows << std::endl; // первый символ в первой строке
+      //std::cout << cols << std::endl; // второй символ в первой строчке
+      first_line++;
+      continue;
+    }
+
+    if (line.size() == 0) {
+      count++;
+      continue;
+    }
+
+    if (count == 0) {
+      //std::cout << rows_first_matrix << std::endl; // вывод 1 матрицы
+      rows_first_matrix++;
+      continue;
+    }
+
+    //std::cout << rows_second_matrix << std::endl; // вывод 1 матрицы
+    rows_second_matrix++;
+
+  }
+
+  file.close();
+
+  // condition for checking data in a file
+  if (rows == rows_first_matrix && rows == rows_second_matrix) {
+    s21::Parser &parser = s21::Parser::GetInstance();
+    // Передача файла через path_to_file
+    const std::string path_to_file = "maze.txt";
+    parser.ParseImport(path_to_file);
+    MazeModel maze;
+    Data data = parser.GetData();
+    maze.SetData(data);
+    maze.PrintMatrix();
+  } else {
+    throw std::invalid_argument("Error! Incorrect data in the file!");
+  }
+
+}
+
 void Parser::ParseImport(const std::string path_to_file) {
   std::string line;
+  // Передача файла через path_to_file
   std::ifstream file("maze.txt"); // окрываем файл для чтения
 
   if (file.is_open())
   {
-    int i = 0;
-    int x = 0;
+    int lines_count = 0;
+    //int x = 0;
     int count = 0;
     char* pEnd;
+    
     while (std::getline(file, line))
     {
       // process first line
-      if (i == 0) {
+      if (lines_count == 0) {
         data_.rows = std::strtof(line.c_str(), &pEnd);
         data_.cols = std::strtof(pEnd, NULL);
         // std::cout << std::strtof(line.c_str(), &pEnd) << std::endl; // первый символ в первой строке
         // std::cout << std::strtof(pEnd, NULL) << std::endl; // второй символ в первой строчке
-        i++;
+        lines_count++;
         continue;
       }
 
       // goto next matrix
       if (line.size() == 0) {
-        x = 0;
+        //x = 0;
         count++;
         continue;
       }
@@ -311,7 +378,7 @@ void Parser::ParseImport(const std::string path_to_file) {
           }
         }
         data_.matrix_right.push_back(rm_tmp);
-        x++;
+        //x++;
         continue;
       } 
       
@@ -329,8 +396,7 @@ void Parser::ParseImport(const std::string path_to_file) {
         }
       }
       data_.matrix_down.push_back(dm_tmp);
-      x++;
-
+      //x++;
     }
   }
   file.close();
@@ -338,6 +404,7 @@ void Parser::ParseImport(const std::string path_to_file) {
 
 void Parser::ParseExport(const std::string path_to_file) {
   std::ofstream out;          // поток для записи
+  // Передача файла через path_to_file
   out.open("hello.txt");      // открываем файл для записи
 
   // Генерация матриц для тестирования
@@ -375,15 +442,17 @@ void Parser::ParseExport(const std::string path_to_file) {
 int main() {
   s21::Parser &parser = s21::Parser::GetInstance();
   const std::string path_to_file = "maze.txt";
-  //parser.ParseImport(path_to_file);
+  parser.ParseImportValidator(path_to_file);
+  //std::cout << "validator end" << std::endl;
+  MazeModel maze;
+  Data data = parser.GetData();
+  maze.SetData(data);
   
-  //Data data = parser.GetData();
-  //maze.SetData(data);
-  // MazeModel maze;
+   //MazeModel maze;
   // maze.SetRows(5);
   // maze.SetCols(5);
   
-  parser.ParseExport(path_to_file);
+  //parser.ParseExport(path_to_file);
   //maze.Generate();
-  //maze.PrintMatrix();
+  
 }
