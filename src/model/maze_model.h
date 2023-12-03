@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <random>
-#include <stack>
+#include <array>
 #include <vector>
 
 #include <string> // подключаем строки
@@ -32,18 +32,20 @@ class MazeModel {
   MazeModel() = default;
   ~MazeModel() = default;
 
-  void Generate(/*int rows, int cols*/);
+  void Generate();
   Data GetData() { return data_; };
   void SetData(Data data) { data_ = data; }
   void Solution(std::pair<int, int> start, std::pair<int, int> finish);
-  std::stack<std::pair<int, int>> GetWay();
-    void ClearWay();
+  const std::array<std::pair<int, int>, 250>& GetWay() { return data_.way; };
+  int GetWaySteps() { return data_.way_steps; };
+  void ClearWay();
+  bool IsSolved() { return data_.is_solved; };
 
   void SetRows(int rows);
   void SetCols(int cols);
   void PrintMatrix();
   void PrintLab();
-  void PrintStack();
+//  void PrintStack();
 
  private:
   Data data_;

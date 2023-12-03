@@ -22,9 +22,9 @@ void MazeModel::Generate() {
 }
 
 void MazeModel::ClearWay() {
-  while (!data_.way.empty()) {
-    data_.way.pop();
-  }
+    data_.is_solved = false;
+    std::pair<int, int> zero_pair = std::make_pair(0, 0);
+    data_.way.fill(zero_pair);
 }
 
 void MazeModel::LastStr(std::vector<Cell> &str) {
@@ -139,9 +139,12 @@ void MazeModel::Solution(std::pair<int, int> start,
                          std::pair<int, int> finish) {
   std::vector<std::vector<Finder>> lab = InitLab();
   int n = Wave(&lab, start, finish);
-  // std::stack<std::pair<int, int>> way =
-  FindWay(lab, n, start, finish);
-  // return way;
+  try {
+      FindWay(lab, n, start, finish);
+      data_.is_solved = true;
+  } catch (...) {
+      data_.is_solved = false;
+  }
 }
 
 std::vector<std::vector<Finder>> MazeModel::InitLab() {
@@ -195,13 +198,12 @@ int MazeModel::Wave(std::vector<std::vector<Finder>> *lab,
 
 void MazeModel::FindWay(std::vector<std::vector<Finder>> lab, int n,
                         std::pair<int, int> start, std::pair<int, int> finish) {
-  // std::stack<std::pair<int, int>> way;
   if (!lab[finish.first][finish.second].step) {
-    throw std::invalid_argument("Путь не найден!\n");
+    throw std::invalid_argument("There is no solution\n");
   } else {
-    int i = finish.first, j = finish.second;
-    data_.way.push(std::make_pair(i, j));
-    while (data_.way.top() != start) {
+    int k = 0, i = finish.first, j = finish.second;
+    data_.way[k] = (std::make_pair(i, j));
+    while (data_.way[k] != start) {
       if (lab[i][j].right && lab[i][j].right->step == n - 1) {
         j++;
       } else if (lab[i][j].left && lab[i][j].left->step == n - 1) {
@@ -211,14 +213,12 @@ void MazeModel::FindWay(std::vector<std::vector<Finder>> lab, int n,
       } else if (lab[i][j].down && lab[i][j].down->step == n - 1) {
         i++;
       }
-      data_.way.push(std::make_pair(i, j));
+      data_.way[++k] = std::make_pair(i, j);
       n--;
     }
-    // return way;
+    data_.way_steps = k + 1;
   }
 }
-
-std::stack<std::pair<int, int>> MazeModel::GetWay() { return data_.way; }
 
 void MazeModel::PrintLab() {
   for (int i = 0; i < data_.cols; i++) std::cout << "__";
@@ -257,15 +257,6 @@ void MazeModel::PrintMatrix() {
   }
 }
 
-void MazeModel::PrintStack() {
-  auto s = data_.way;
-  while (!s.empty()) {
-    std::cout << "(" << s.top().first << ", " << s.top().second << ") ";
-    s.pop();
-  }
-  std::cout << '\n';
-}
-
 //parser
 
 void Parser::ParseImportValidator(const std::string path_to_file) {
@@ -286,7 +277,7 @@ void Parser::ParseImportValidator(const std::string path_to_file) {
   int count = 0;
   char* pEnd;
 
-  // loop for writing values ​​to check
+  // loop for writing values to check
   while (std::getline(file, line))
   { 
     if (first_line == 0) {
@@ -440,6 +431,7 @@ void Parser::ParseExport(const std::string path_to_file) {
 }
 
 // int main() {
+//
 //   s21::Parser &parser = s21::Parser::GetInstance();
 //   const std::string path_to_file = "maze3x3.txt";
 //   //parser.ParseImportValidator(path_to_file);
@@ -450,7 +442,7 @@ void Parser::ParseExport(const std::string path_to_file) {
 //   maze.SetData(data);
 //   // maze.SetRows(3);
 //   // maze.SetCols(3);
-  
+//
 //   //parser.ParseExport(path_to_file);
 //   // maze.Generate();
 //   maze.PrintMatrix();

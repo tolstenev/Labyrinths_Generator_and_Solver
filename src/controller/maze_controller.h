@@ -17,15 +17,15 @@ class MazeController {
   void SetRows(int rows) { model_.SetRows(rows); };
   void SetCols(int cols) { model_.SetCols(cols); };
 
-  std::stack<std::pair<int, int>> GetWay(std::pair<int, int> start,
+  const std::array<std::pair<int, int>, 250>& GetWay(std::pair<int, int> start,
                                          std::pair<int, int> finish) {
     model_.Solution(start, finish);
     return model_.GetWay();
   };
 
-  void ClearWay() {
-      model_.ClearWay();
-  }
+  int GetWaySteps() { return model_.GetWaySteps(); }
+  void ClearWay() { model_.ClearWay(); }
+  bool IsSolved() { return model_.IsSolved(); };
 
  private:
   MazeModel &model_;

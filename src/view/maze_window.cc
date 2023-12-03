@@ -11,25 +11,25 @@ s21::MazeWindow::MazeWindow(MazeController &controller, QWidget *parent)
 
 void s21::MazeWindow::ConnectSlots() {
   connect(ui_->bt_generate, &QPushButton::clicked, this, &MazeWindow::Generate);
-//  connect(ui_->bt_solve, &QPushButton::clicked, this, &MazeWindow::Solve);
   connect(ui_->bt_clear, &QPushButton::clicked, this, &MazeWindow::Clear);
-  connect(ui_->bt_import, &QPushButton::clicked, this, &MazeWindow::Import);
-  connect(ui_->bt_export, &QPushButton::clicked, this, &MazeWindow::Export);
+//  connect(ui_->bt_import, &QPushButton::clicked, this, &MazeWindow::Import);
+//  connect(ui_->bt_export, &QPushButton::clicked, this, &MazeWindow::Export);
 }
 
-void s21::MazeWindow Import() {
-
-}
-
-void s21::MazeWindow Export() {
-  
-}
+//void s21::MazeWindow Import() {
+//
+//}
+//
+//void s21::MazeWindow Export() {
+//
+//}
 
 void s21::MazeWindow::Generate() {
+  Clear();
   controller_.SetRows(ui_->sb_vertical_cells->value());
   controller_.SetCols(ui_->sb_horizont_cells->value());
   data_ = controller_.Generate();
-  data_.exist = true;
+  data_exist_ = true;
   repaint();
 }
 
@@ -83,52 +83,32 @@ void s21::MazeWindow::DrawMaze(QPainter *painter) {
 }
 
 void s21::MazeWindow::DrawSolving(QPainter *painter) {
-  //    /*For data_.way in list realization*/
-  //    painter->setPen(QPen(Qt::red, 2));
-  //    double start_x = start_x_ + cell_width_ / 2;
-  //    double start_y = start_y_ + cell_height_ / 2;
-  //    if (data_.way.size() > 1) {
-  //        std::pair<int, int> current = data_.way.top();
-  //        data_.way.pop();
-  //        while (!data_.way.empty()) {
-  //            std::pair<int, int> next = data_.way.top();
-  //            data_.way.pop();
-  //            painter->drawLine(std::round(start_x + current.second *
-  //            cell_height_),
-  //                              std::round(start_y + current.first *
-  //                              cell_width_), std::round(start_x + next.second
-  //                              * cell_height_), std::round(start_y +
-  //                              next.first * cell_width_));
-  //            current = next;
-  //        }
-  //    }
     if (show_way_) {
-        auto s = data_.way;
         painter->setPen(QPen(Qt::red, 2));
         double start_x = start_x_ + cell_width_ / 2;
         double start_y = start_y_ + cell_height_ / 2;
-        if (s.size() > 1) {
-            std::pair<int, int> current = s.top();
-            s.pop();
-            while (!s.empty()) {
-                std::pair<int, int> next = s.top();
-                s.pop();
-                painter->drawLine(std::round(start_x + current.second * cell_width_),
-                                  std::round(start_y + current.first * cell_height_),
-                                  std::round(start_x + next.second * cell_width_),
-                                  std::round(start_y + next.first * cell_height_));
-                current = next;
-            }
+        std::pair<int, int> current = data_.way[0];
+        std::pair<int, int> next;
+        for (int i = 1; i < data_.way_steps; ++i) {
+            next = data_.way[i];
+            painter->drawLine(std::round(start_x + current.second * cell_width_),
+                              std::round(start_y + current.first * cell_height_),
+                              std::round(start_x + next.second * cell_width_),
+                              std::round(start_y + next.first * cell_height_));
+            current = next;
         }
     }
 }
 
 void s21::MazeWindow::Solve() {
-  if (data_.exist && !data_.is_solved) {
-    data_.way = controller_.GetWay(data_.start, data_.finish);
-    data_.is_solved = true;
+  if (data_exist_ && !controller_.IsSolved()) {
+    data_.way = controller_.GetWay(start_, finish_);
+    data_.way_steps = controller_.GetWaySteps();
     show_way_ = true;
     update();
+  } else {
+      QErrorMessage error_message;
+      error_message.showMessage("This maze has no solution");
   }
 }
 
@@ -142,9 +122,8 @@ void s21::MazeWindow::keyPressEvent(QKeyEvent *event) {
 
 void s21::MazeWindow::Clear() {
     show_way_ = false;
-    data_.is_solved = false;
-    data_.start_is_set = false;
-    data_.finish_is_set = false;
+    start_is_set_ = false;
+    finish_is_set_ = false;
     controller_.ClearWay();
     update();
 }
@@ -153,15 +132,17 @@ void s21::MazeWindow::mouseReleaseEvent(QMouseEvent* event) {
     QPoint p = event->pos();
     int y = (p.x() - start_x_) / cell_width_;
     int x = (p.y() - start_y_) / cell_height_;
-    if (!data_.exist) {
+    if (!data_exist_) {
         Generate();
-    } else if (!data_.start_is_set) {
-        data_.start = std::make_pair(x, y);
-        data_.start_is_set = true;
-    } else if (!data_.finish_is_set) {
-        data_.finish = std::make_pair(x, y);
-        data_.finish_is_set = true;
+    } else if (!start_is_set_) {
+        start_ = std::make_pair(x, y);
+        start_is_set_ = true;
+    } else if (!finish_is_set_) {
+        finish_ = std::make_pair(x, y);
+        finish_is_set_ = true;
         Solve();
+    } else {
+        Clear();
     }
 }
 

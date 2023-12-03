@@ -4,6 +4,7 @@
 #include <QKeyEvent>
 #include <QMainWindow>
 #include <QPainter>
+#include <QErrorMessage>
 #include <vector>
 
 #include "../controller/maze_controller.h"
@@ -32,19 +33,25 @@ class MazeWindow : public QMainWindow {
  private slots:
   void Generate();
   void Solve();
-  void Import();
-  void Export();
+//  void Import();
+//  void Export();
 
  private:
   Ui::MazeWindow *ui_;
   MazeController &controller_;
-  Data data_{};
+  Data data_;
   const double start_x_{280};
   const double start_y_{20};
   const double size_{500};
   double cell_width_{};
   double cell_height_{};
   bool show_way_ = false;
+  bool start_is_set_ = false;
+  bool finish_is_set_ = false;
+  bool maze_is_solved_ = false;
+  bool data_exist_ = false;
+  std::pair<int, int> start_{};
+  std::pair<int, int> finish_{};
 
   void ConnectSlots();
   void DrawBoarders(QPainter *painter);
