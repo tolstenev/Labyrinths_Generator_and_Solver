@@ -5,7 +5,7 @@ CPP_FLAGS		:= -std=c++17 -pedantic -lstdc++
 MAIN			:= ./src/main.cc
 VIEW_HDR		:= ./src/view/maze_window.h
 VIEW_SRC		:= ./src/view/maze_window.cc
-CONTROLLER_HDR	:=
+CONTROLLER_HDR	:= ./src/controller/maze_controller.h
 MODEL_HDR		:= ./src/model/maze_model.h
 MODEL_SRC		:= ./src/model/maze_model.cc
 HELPER_HDR		:= ./src/helpers/data_objects.h
