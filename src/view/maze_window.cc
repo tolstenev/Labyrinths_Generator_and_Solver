@@ -12,17 +12,41 @@ s21::MazeWindow::MazeWindow(MazeController &controller, QWidget *parent)
 void s21::MazeWindow::ConnectSlots() {
   connect(ui_->bt_generate, &QPushButton::clicked, this, &MazeWindow::Generate);
   connect(ui_->bt_clear, &QPushButton::clicked, this, &MazeWindow::Clear);
-//  connect(ui_->bt_import, &QPushButton::clicked, this, &MazeWindow::Import);
-//  connect(ui_->bt_export, &QPushButton::clicked, this, &MazeWindow::Export);
+  connect(ui_->bt_import, &QPushButton::clicked, this, &MazeWindow::Import);
+  connect(ui_->bt_export, &QPushButton::clicked, this, &MazeWindow::Export);
 }
 
-//void s21::MazeWindow Import() {
-//
-//}
-//
-//void s21::MazeWindow Export() {
-//
-//}
+void s21::MazeWindow::Import() {
+    QString path_to_file = QFileDialog::getOpenFileName(
+            this, tr("Open File"), QDir::homePath(), tr("*.txt"));
+    if (path_to_file.isEmpty()) {
+        return;
+    }
+    QFile file(path_to_file);
+    if (!file.open(QIODevice::ReadOnly)) {
+        QErrorMessage error_message;
+        error_message.showMessage("Unable to open file");
+        return;
+    }
+//    controller_.Import(path_to_file.toStdString());
+}
+
+
+void s21::MazeWindow::Export() {
+    QString path_to_file = QFileDialog::getSaveFileName(this,
+                                                    tr("Save Maze"), QDir::homePath(),
+                                                    tr("Maze (*.txt);;All Files (*)"));
+    if (path_to_file.isEmpty()) {
+        return;
+    }
+    QFile file(path_to_file);
+    if (!file.open(QIODevice::WriteOnly)) {
+        QErrorMessage error_message;
+        error_message.showMessage("Unable to open file");
+        return;
+    }
+//    controller_.Export(path_to_file.toStdString());
+}
 
 void s21::MazeWindow::Generate() {
   Clear();
@@ -130,19 +154,22 @@ void s21::MazeWindow::Clear() {
 
 void s21::MazeWindow::mouseReleaseEvent(QMouseEvent* event) {
     QPoint p = event->pos();
-    int y = (p.x() - start_x_) / cell_width_;
-    int x = (p.y() - start_y_) / cell_height_;
-    if (!data_exist_) {
-        Generate();
-    } else if (!start_is_set_) {
-        start_ = std::make_pair(x, y);
-        start_is_set_ = true;
-    } else if (!finish_is_set_) {
-        finish_ = std::make_pair(x, y);
-        finish_is_set_ = true;
-        Solve();
-    } else {
-        Clear();
+    if (p.x() > start_x_ && p.x() < start_x_ + size_ &&
+        p.y() > start_y_ && p.y() < start_y_ + size_) {
+        int row = (p.y() - start_y_) / cell_height_;
+        int col = (p.x() - start_x_) / cell_width_;
+        if (!data_exist_) {
+            Generate();
+        } else if (!start_is_set_) {
+            start_ = std::make_pair(row, col);
+            start_is_set_ = true;
+        } else if (!finish_is_set_) {
+            finish_ = std::make_pair(row, col);
+            finish_is_set_ = true;
+            Solve();
+        } else {
+            Clear();
+        }
     }
 }
 

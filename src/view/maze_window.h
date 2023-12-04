@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <QPainter>
 #include <QErrorMessage>
+#include <QFileDialog>
 #include <vector>
 
 #include "../controller/maze_controller.h"
@@ -33,8 +34,8 @@ class MazeWindow : public QMainWindow {
  private slots:
   void Generate();
   void Solve();
-//  void Import();
-//  void Export();
+  void Import();
+  void Export();
 
  private:
   Ui::MazeWindow *ui_;
