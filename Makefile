@@ -9,6 +9,7 @@ CONTROLLER_HDR	:=
 MODEL_HDR		:= ./src/model/maze_model.h
 MODEL_SRC		:= ./src/model/maze_model.cc
 HELPER_HDR		:= ./src/helpers/data_objects.h
+TEST_PATH		:= ./src/google_tests/tests.cc
 
 INSTALL_DIR 	:= $(HOME)/Desktop
 
@@ -18,7 +19,16 @@ SRCS			:= $(VIEW_HDR)       \
 			   	   $(MODEL_HDR)      \
 			   	   $(MODEL_SRC)      \
 			   	   $(HELPER_HDR)     \
-			   	   $(MAIN)
+			   	   $(MAIN)           \
+				   $(TEST_PATH)
+
+ifeq ($(OS), Darwin)
+	LIBFLAGS = -lm -lgtest -lgtest_main -lstdc++
+else
+	LIBFLAGS=-lgtest -lgtest_main -lm -lpthread -fprofile-arcs -ftest-coverage -lstdc++
+endif
+
+all: clean install open
 
 install: clean
 	mkdir build
@@ -32,6 +42,10 @@ uninstall:
 	rm -rf ./build
 	rm -rf $(INSTALL_DIR)/$(NAME).app
 
+tests: clean
+	$(CC) $(CPP_FLAGS) $(TEST_PATH) $(MODEL_SRC) -o test $(LIBFLAGS)
+	./test	
+
 lint: .clang-format
 	@clear
 	clang-format -i $(SRCS)
@@ -43,4 +57,13 @@ check: .clang-format
 clean:
 	@clear
 	rm -rf build
-	rm -rf $(NAME)/
+	rm -rf $(NAME)\
+	*.o \
+	*.info \
+	*.gcda \
+	*.gcno \
+	*.gcov \
+	*.gch  \
+	report \
+	test   \
+	*.out    

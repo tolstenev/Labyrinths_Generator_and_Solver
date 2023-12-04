@@ -32,10 +32,12 @@ class MazeModel {
   void Generate(/*int rows, int cols*/);
   Data GetData() { return data_; };
   void Solution(std::pair<int, int> start, std::pair<int, int> finish);
-  std::stack<std::pair<int, int>> GetWay();
+  std::vector<std::pair<int, int>> GetWay();
 
   void SetRows(int rows);
   void SetCols(int cols);
+  void SetData(Data data);
+  void SizeMatrix(int rows, int cols);
   void PrintMatrix();
   void PrintLab();
 
@@ -48,13 +50,12 @@ class MazeModel {
   void DownWall(std::vector<Cell> &str);
   void CopyString(std::vector<Cell> str, int n);
   void UniteSet(std::vector<Cell> &str, int i);
-  void SizeMatrix(int rows, int cols);
+
   std::vector<std::vector<Finder>> InitLab();
   int Wave(std::vector<std::vector<Finder>> *lab, std::pair<int, int> start,
            std::pair<int, int> finish);
-  void FindWay(std::vector<std::vector<Finder>> lab,
-                                          int n, std::pair<int, int> start,
-                                          std::pair<int, int> finish);
+  void FindWay(std::vector<std::vector<Finder>> lab, int n,
+               std::pair<int, int> start, std::pair<int, int> finish);
 };
 
 }  // namespace s21

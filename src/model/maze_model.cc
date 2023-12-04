@@ -1,6 +1,5 @@
 #include "maze_model.h"
 
-
 using namespace s21;
 
 void MazeModel::Generate(/*int rows, int cols*/) {
@@ -122,6 +121,8 @@ void MazeModel::SetRows(int rows) { data_.rows = rows; }
 
 void MazeModel::SetCols(int cols) { data_.cols = cols; }
 
+void MazeModel::SetData(Data data) { data_ = data; }
+
 void MazeModel::SizeMatrix(int rows, int cols) {
   data_.matrix_right.resize(rows);
   data_.matrix_down.resize(rows);
@@ -131,13 +132,13 @@ void MazeModel::SizeMatrix(int rows, int cols) {
   }
 }
 
-void MazeModel::Solution(
-    std::pair<int, int> start, std::pair<int, int> finish) {
+void MazeModel::Solution(std::pair<int, int> start,
+                         std::pair<int, int> finish) {
   std::vector<std::vector<Finder>> lab = InitLab();
   int n = Wave(&lab, start, finish);
-  // std::stack<std::pair<int, int>> way = 
+  // std::stack<std::pair<int, int>> way =
   FindWay(lab, n, start, finish);
-  //return way;
+  // return way;
 }
 
 std::vector<std::vector<Finder>> MazeModel::InitLab() {
@@ -189,16 +190,15 @@ int MazeModel::Wave(std::vector<std::vector<Finder>> *lab,
   return n;
 }
 
-void MazeModel::FindWay(
-    std::vector<std::vector<Finder>> lab, int n, std::pair<int, int> start,
-    std::pair<int, int> finish) {
-  //std::stack<std::pair<int, int>> way;
+void MazeModel::FindWay(std::vector<std::vector<Finder>> lab, int n,
+                        std::pair<int, int> start, std::pair<int, int> finish) {
+  // std::stack<std::pair<int, int>> way;
   if (!lab[finish.first][finish.second].step) {
     throw std::invalid_argument("Путь не найден!\n");
   } else {
     int i = finish.first, j = finish.second;
-    data_.way.push(std::make_pair(i, j));
-    while (data_.way.top() != start) {
+    data_.way.push_back(std::make_pair(i, j));
+    while (data_.way.back() != start) {
       if (lab[i][j].right && lab[i][j].right->step == n - 1) {
         j++;
       } else if (lab[i][j].left && lab[i][j].left->step == n - 1) {
@@ -208,15 +208,15 @@ void MazeModel::FindWay(
       } else if (lab[i][j].down && lab[i][j].down->step == n - 1) {
         i++;
       }
-      data_.way.push(std::make_pair(i, j));
+      data_.way.push_back(std::make_pair(i, j));
       n--;
     }
-    //return way;
+
+    // return way;
   }
 }
 
-
-std::stack<std::pair<int, int>> MazeModel::GetWay() { return data_.way; }
+std::vector<std::pair<int, int>> MazeModel::GetWay() { return data_.way; }
 
 void MazeModel::PrintMatrix() {
   for (int i = 0; i < data_.rows; i++) {
@@ -255,32 +255,29 @@ void MazeModel::PrintLab() {
   }
 }
 
-void PrintStack(std::stack<std::pair<int, int>> s) {
+void PrintStack(std::vector<std::pair<int, int>> s) {
   while (!s.empty()) {
-    std::cout << "(" << s.top().first << ", " << s.top().second << ") ";
-    s.pop();
+    std::cout << "(" << s.back().first << ", " << s.back().second << ") ";
+    s.pop_back();
   }
   std::cout << '\n';
 }
 
-
-
-//  }
-// int main() {
-//   MazeModel A;
-//   A.SetRows(50);
-//   A.SetCols(50);
-//   A.Generate();
-//   //   try {
-//   //      std::stack<std::pair<int, int>> B = A.Solution(std::make_pair(0,
-//   // 0),
-//   //      std::make_pair(4, 4));
-//   //   } catch (std::exception &e) {
-//   //     std::cout << e.what() << std::endl;
-//   //   }
-//   // std::stack<std::pair<int, int>> B =
-//   A.Solution(std::make_pair(0, 0), std::make_pair(1, 9));
-//   // A.PrintMatrix();
-//   A.PrintLab();
-//   PrintStack(A.GetWay());
-// }
+int main() {
+  MazeModel A;
+  A.SetRows(5);
+  A.SetCols(5);
+  A.Generate();
+  //   try {
+  //      std::stack<std::pair<int, int>> B = A.Solution(std::make_pair(0,
+  // 0),
+  //      std::make_pair(4, 4));
+  //   } catch (std::exception &e) {
+  //     std::cout << e.what() << std::endl;
+  //   }
+  // std::stack<std::pair<int, int>> B =
+  A.Solution(std::make_pair(0, 0), std::make_pair(4, 4));
+  A.PrintMatrix();
+  A.PrintLab();
+  PrintStack(A.GetWay());
+}
