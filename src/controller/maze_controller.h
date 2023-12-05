@@ -27,13 +27,13 @@ class MazeController {
   void ClearWay() { model_.ClearWay(); }
   bool IsSolved() { return model_.IsSolved(); };
 
-//  void Import(const std::string path_to_file) {
-//      model_.Import(path_to_file);
-//  }
+ void Import(const std::string path_to_file) {
+    Parser::GetInstance().ParseImport(path_to_file);
+ }
 
-//  void Export(const std::string path_to_file) {
-//      model_.Export(path_to_file);
-//  }
+ void Export(const std::string path_to_file) {
+    Parser::GetInstance().ParseExport(path_to_file);
+ }
 
  private:
   MazeModel &model_;
