@@ -34,10 +34,11 @@ TEST(maze_tests, way_1) {
   coordinates.push_back(std::make_pair(4, 2));
   coordinates.push_back(std::make_pair(4, 3));
   coordinates.push_back(std::make_pair(4, 4));
-
+  <std::pair<int, int>> std::array[250];
+  std::copy(coordinates.begin(), coordinates.end(), array);
   A.Solution(std::make_pair(0, 0), std::make_pair(4, 4));
 
-  EXPECT_TRUE(A.GetWay() == coordinates);
+  EXPECT_TRUE(A.GetWay() == array);
 }
 
 TEST(maze_tests, way_2) {
