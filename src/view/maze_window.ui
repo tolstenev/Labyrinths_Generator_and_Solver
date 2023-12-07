@@ -108,7 +108,7 @@
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>220</y>
+      <y>190</y>
       <width>131</width>
       <height>31</height>
      </rect>
@@ -121,7 +121,7 @@
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>260</y>
+      <y>230</y>
       <width>131</width>
       <height>31</height>
      </rect>
@@ -130,17 +130,17 @@
      <string>Export</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="bt_clear">
+   <widget class="QPushButton" name="bt_clear_solution">
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>150</y>
+      <y>310</y>
       <width>131</width>
       <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>Clear</string>
+     <string>Clear solution</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_4">
@@ -154,6 +154,32 @@
     </property>
     <property name="text">
      <string>Tip: Click on the maze to set start and finish points</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="bt_clear_all">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>350</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Clear all</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="bt_solve">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>420</y>
+      <width>131</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Solve</string>
     </property>
    </widget>
   </widget>

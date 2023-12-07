@@ -1,11 +1,11 @@
 #ifndef MAZE_VIEW_MAZE_WINDOW_H
 #define MAZE_VIEW_MAZE_WINDOW_H
 
+#include <QErrorMessage>
+#include <QFileDialog>
 #include <QKeyEvent>
 #include <QMainWindow>
 #include <QPainter>
-#include <QErrorMessage>
-#include <QFileDialog>
 #include <vector>
 
 #include "../controller/maze_controller.h"
@@ -29,13 +29,16 @@ class MazeWindow : public QMainWindow {
 
   void keyPressEvent(QKeyEvent *event) override;
   void paintEvent(QPaintEvent *event) override;
-  void mouseReleaseEvent(QMouseEvent* event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
 
  private slots:
   void Generate();
   void Solve();
+  void SolveDefault();
   void Import();
   void Export();
+  void ClearSolution();
+  void ClearAll();
 
  private:
   Ui::MazeWindow *ui_;
@@ -46,6 +49,7 @@ class MazeWindow : public QMainWindow {
   const double size_{500};
   double cell_width_{};
   double cell_height_{};
+  bool show_maze_ = false;
   bool show_way_ = false;
   bool start_is_set_ = false;
   bool finish_is_set_ = false;
@@ -58,7 +62,6 @@ class MazeWindow : public QMainWindow {
   void DrawBoarders(QPainter *painter);
   void DrawMaze(QPainter *painter);
   void DrawSolving(QPainter *painter);
-    void Clear();
 };
 
 }  // namespace s21
