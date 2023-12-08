@@ -70,7 +70,7 @@ class MazeModel {
            std::pair<int, int> finish);
   void FindWay(std::vector<std::vector<Finder>> lab, int n,
                std::pair<int, int> start, std::pair<int, int> finish);
-    MazeModel::ModelError ScanMatrixLineToVector(std::string from, size_t line_size, std::vector<bool> to);
+    MazeModel::ModelError ScanMatrixLineToVector(std::string from, size_t line_size, std::vector<bool>& to);
 
 };
 

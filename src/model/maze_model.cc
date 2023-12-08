@@ -342,9 +342,6 @@ int MazeModel::Import(const std::string path_to_file) {
     data_.rows = tmp;
   } else {
     errcode = ModelError::kErrorReading;
-    qDebug() << ("data_.rows");
-    qDebug() << QString::number(tmp);
-
   }
 
   if (errcode == ModelError::kOk) {
@@ -353,11 +350,11 @@ int MazeModel::Import(const std::string path_to_file) {
       data_.cols = tmp;
     } else {
       errcode = ModelError::kErrorReading;
-      qDebug() << ("data_.cols");
-
     }
 
     ResizeMatrix();
+    data_.matrix_right.clear();
+    data_.matrix_down.clear();
 
     while (std::getline(file, line) && (errcode == ModelError::kOk)) {
       line_size = line.size();
@@ -369,7 +366,6 @@ int MazeModel::Import(const std::string path_to_file) {
 
       std::vector<bool> tmp_vector;
       errcode = ScanMatrixLineToVector(line, line_size, tmp_vector);
-      qDebug() << QString::number(static_cast<int>(errcode));
 
       if (errcode == ModelError::kOk) {
         if (right_matrix) {
@@ -384,18 +380,14 @@ int MazeModel::Import(const std::string path_to_file) {
 
     if (data_.rows != matrix_right_lines && data_.rows != matrix_down_lines) {
       errcode = ModelError::kErrorReading;
-      qDebug() << ("data_.rows != matrix_right_lines");
-
     }
-
-    PrintMatrix();
 
   }
   file.close();
   return static_cast<int>(errcode);
 }
 
-MazeModel::ModelError MazeModel::ScanMatrixLineToVector(std::string from, size_t line_size, std::vector<bool> to) {
+MazeModel::ModelError MazeModel::ScanMatrixLineToVector(std::string from, size_t line_size, std::vector<bool>& to) {
   ModelError errcode = ModelError::kOk;
   for (size_t i = 0; (i < line_size) && (errcode == ModelError::kOk); ++i) {
     if (from[i] != ' ') {

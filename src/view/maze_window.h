@@ -8,6 +8,7 @@
 #include <QMainWindow>
 #include <QPainter>
 #include <QDebug>
+#include <QString>
 #include <vector>
 
 #include "../controller/maze_controller.h"

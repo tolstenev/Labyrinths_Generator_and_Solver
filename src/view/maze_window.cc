@@ -33,39 +33,35 @@ void s21::MazeWindow::Import() {
   QString path_to_file = QFileDialog::getOpenFileName(
       this, tr("Open File"), QDir::homePath(), tr("*.txt"));
 
-  if (path_to_file.isEmpty()) {
-    error_message.showMessage("Uncorrected filename or path to file");
-    return;
+  if (!path_to_file.isEmpty()) {
+
+    QFileInfo file(path_to_file);
+
+    if (!file.exists()) {
+      error_message.showMessage("File does not exist");
+      return;
+    }
+
+    if (!file.isReadable()) {
+      error_message.showMessage("Unable to open file for reading");
+      return;
+    }
+
+    int errcode = controller_.Import(path_to_file.toStdString());
+
+    if (errcode) {
+      error_message.showMessage("Uncorrected data in file. Cannot build the maze");
+      return;
+    }
+
+    data_ = controller_.GetData();
+    ui_->sb_vertical_cells->setValue(data_.rows);
+    ui_->sb_horizont_cells->setValue(data_.cols);
+    data_exist_ = true;
+    show_maze_ = true;
+
+    repaint();
   }
-
-  QFileInfo file(path_to_file);
-
-  if (!file.exists()) {
-    error_message.showMessage("File does not exist");
-    return;
-  }
-
-  if (!file.isReadable()) {
-    error_message.showMessage("Unable to open file for reading");
-    return;
-  }
-
-  int errcode = controller_.Import(path_to_file.toStdString());
-
-  if (errcode) {
-    error_message.showMessage("Uncorrected data in file. Cannot build the maze");
-    return;
-  }
-
-  data_ = controller_.GetData();
-  ui_->sb_vertical_cells->setValue(data_.rows);
-  ui_->sb_horizont_cells->setValue(data_.cols);
-  data_exist_ = true;
-  show_maze_ = true;
-
-  qDebug() << ("data in");
-
-  repaint();
 }
 
 void s21::MazeWindow::Export() {
