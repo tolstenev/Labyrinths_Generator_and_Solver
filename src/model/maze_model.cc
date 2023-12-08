@@ -1,11 +1,6 @@
 #include "maze_model.h"
-#include <QDebug>
-#include <QString>
-#include <iostream>
 
-using namespace s21;
-
-void MazeModel::Generate() {
+void s21::MazeModel::Generate() {
   ClearWay();
   ResizeMatrix();
   std::vector<Cell> str(data_.cols);
@@ -24,13 +19,13 @@ void MazeModel::Generate() {
   }
 }
 
-void MazeModel::ClearWay() {
-    data_.is_solved = false;
-    std::pair<int, int> zero_pair = std::make_pair(0, 0);
-    data_.way.fill(zero_pair);
+void s21::MazeModel::ClearWay() {
+  data_.is_solved = false;
+  std::pair<int, int> zero_pair = std::make_pair(0, 0);
+  data_.way.fill(zero_pair);
 }
 
-void MazeModel::LastStr(std::vector<Cell> &str) {
+void s21::MazeModel::LastStr(std::vector<Cell> &str) {
   for (int i = 0; i < data_.cols; i++) {
     str[i].down = 1;
   }
@@ -42,7 +37,7 @@ void MazeModel::LastStr(std::vector<Cell> &str) {
   }
 }
 
-void MazeModel::NextStr(std::vector<Cell> &str, int *set_count) {
+void s21::MazeModel::NextStr(std::vector<Cell> &str, int *set_count) {
   for (int i = 0; i < data_.cols - 1; i++) {
     str[i].right = 0;
   }
@@ -55,12 +50,10 @@ void MazeModel::NextStr(std::vector<Cell> &str, int *set_count) {
   }
 }
 
-void MazeModel::RightWall(std::vector<Cell> &str) {
-  // Создание генератора случайных чисел
+void s21::MazeModel::RightWall(std::vector<Cell> &str) {
   std::random_device rd;
   std::mt19937 gen(rd());
 
-  // Задание диапазона случайных чисел
   std::uniform_int_distribution<> dis(0, 1);
 
   for (int i = 0; i < data_.cols - 1; i++) {
@@ -80,12 +73,10 @@ void MazeModel::RightWall(std::vector<Cell> &str) {
   str[data_.cols - 1].right = 1;
 }
 
-void MazeModel::DownWall(std::vector<Cell> &str) {
-  // Создание генератора случайных чисел
+void s21::MazeModel::DownWall(std::vector<Cell> &str) {
   std::random_device rd;
   std::mt19937 gen(rd());
 
-  // Задание диапазона случайных чисел
   std::uniform_int_distribution<> dis(0, 1);
 
   for (int i = 0; i < data_.cols; i++) {
@@ -109,14 +100,14 @@ void MazeModel::DownWall(std::vector<Cell> &str) {
   }
 }
 
-void MazeModel::CopyString(std::vector<Cell> str, int n) {
+void s21::MazeModel::CopyString(std::vector<Cell> str, int n) {
   for (int i = 0; i < data_.cols; i++) {
     data_.matrix_right[n][i] = str[i].right;
     data_.matrix_down[n][i] = str[i].down;
   }
 }
 
-void MazeModel::UniteSet(std::vector<Cell> &str, int i) {
+void s21::MazeModel::UniteSet(std::vector<Cell> &str, int i) {
   int num = str[i + 1].set;
   for (int j = 0; j < data_.cols; j++) {
     if (str[j].set == num) {
@@ -125,11 +116,11 @@ void MazeModel::UniteSet(std::vector<Cell> &str, int i) {
   }
 }
 
-void MazeModel::SetRows(int rows) { data_.rows = rows; }
+void s21::MazeModel::SetRows(int rows) { data_.rows = rows; }
 
-void MazeModel::SetCols(int cols) { data_.cols = cols; }
+void s21::MazeModel::SetCols(int cols) { data_.cols = cols; }
 
-void MazeModel::ResizeMatrix() {
+void s21::MazeModel::ResizeMatrix() {
   data_.matrix_right.resize(data_.rows);
   data_.matrix_down.resize(data_.rows);
   for (int i = 0; i < data_.rows; i++) {
@@ -138,21 +129,21 @@ void MazeModel::ResizeMatrix() {
   }
 }
 
-void MazeModel::Solution(std::pair<int, int> start,
-                         std::pair<int, int> finish) {
+void s21::MazeModel::Solution(std::pair<int, int> start,
+                              std::pair<int, int> finish) {
   std::vector<std::vector<Finder>> lab = InitLab();
   int n = Wave(&lab, start, finish);
   try {
-      FindWay(lab, n, start, finish);
-      data_.is_solved = true;
+    FindWay(lab, n, start, finish);
+    data_.is_solved = true;
   } catch (...) {
-      data_.is_solved = false;
+    data_.is_solved = false;
   }
 }
 
-std::vector<std::vector<Finder>> MazeModel::InitLab() {
-  std::vector<std::vector<Finder>> lab(data_.rows,
-                                       std::vector<Finder>(data_.cols));
+std::vector<std::vector<s21::Finder>> s21::MazeModel::InitLab() {
+  std::vector<std::vector<s21::Finder>> lab(data_.rows,
+                                            std::vector<Finder>(data_.cols));
   for (int i = 0; i < data_.rows; i++) {
     for (int j = 0; j < data_.cols; j++) {
       if (!data_.matrix_right[i][j]) lab[i][j].right = &lab[i][j + 1];
@@ -165,8 +156,9 @@ std::vector<std::vector<Finder>> MazeModel::InitLab() {
   return lab;
 }
 
-int MazeModel::Wave(std::vector<std::vector<Finder>> *lab,
-                    std::pair<int, int> start, std::pair<int, int> finish) {
+int s21::MazeModel::Wave(std::vector<std::vector<s21::Finder>> *lab,
+                         std::pair<int, int> start,
+                         std::pair<int, int> finish) {
   (*lab)[start.first][start.second].step = 1;
   int n = 1;
   while (!(*lab)[finish.first][finish.second].step) {
@@ -199,8 +191,9 @@ int MazeModel::Wave(std::vector<std::vector<Finder>> *lab,
   return n;
 }
 
-void MazeModel::FindWay(std::vector<std::vector<Finder>> lab, int n,
-                        std::pair<int, int> start, std::pair<int, int> finish) {
+void s21::MazeModel::FindWay(std::vector<std::vector<Finder>> lab, int n,
+                             std::pair<int, int> start,
+                             std::pair<int, int> finish) {
   if (!lab[finish.first][finish.second].step) {
     throw std::invalid_argument("There is no solution\n");
   } else {
@@ -223,7 +216,7 @@ void MazeModel::FindWay(std::vector<std::vector<Finder>> lab, int n,
   }
 }
 
-void MazeModel::PrintLab() {
+void s21::MazeModel::PrintLab() {
   for (int i = 0; i < data_.cols; i++) std::cout << "__";
   std::cout << std::endl;
   for (int i = 0; i < data_.rows; i++) {
@@ -244,7 +237,7 @@ void MazeModel::PrintLab() {
   }
 }
 
-void MazeModel::PrintMatrix() {
+void s21::MazeModel::PrintMatrix() {
   for (int i = 0; i < data_.rows; i++) {
     for (int j = 0; j < data_.cols; j++) {
       std::cout << data_.matrix_right[i][j] << " ";
@@ -260,78 +253,12 @@ void MazeModel::PrintMatrix() {
   }
 }
 
-//parser
-
-//void Parser::ParseImportValidator(const std::string path_to_file) {
-//  std::string line;
-//  // Передача файла через path_to_file
-//  std::ifstream file("maze.txt");
-//
-//  if (!file.is_open()) {
-//    throw std::invalid_argument("Error! File Not Found!");
-//  }
-//  // variables for checking data in a file
-//  int rows = 0;
-//  int cols = 0;
-//  int rows_first_matrix = 0;
-//  int rows_second_matrix = 0;
-//
-//  int first_line = 0;
-//  int count = 0;
-//  char* pEnd;
-//
-//  // loop for writing values to check
-//  while (std::getline(file, line))
-//  {
-//    if (first_line == 0) {
-//      rows = std::strtof(line.c_str(), &pEnd);
-//      cols = std::strtof(pEnd, NULL);
-//      //std::cout << rows << std::endl; // первый символ в первой строке
-//      //std::cout << cols << std::endl; // второй символ в первой строчке
-//      first_line++;
-//      continue;
-//    }
-//
-//    if (line.size() == 0) {
-//      count++;
-//      continue;
-//    }
-//
-//    if (count == 0) {
-//      //std::cout << rows_first_matrix << std::endl; // вывод 1 матрицы
-//      rows_first_matrix++;
-//      continue;
-//    }
-//
-//    //std::cout << rows_second_matrix << std::endl; // вывод 1 матрицы
-//    rows_second_matrix++;
-//
-//  }
-//
-//  file.close();
-//
-//  // condition for checking data in a file
-//  if (rows == rows_first_matrix && rows == rows_second_matrix) {
-//    s21::Parser &parser = s21::Parser::GetInstance();
-//    // Передача файла через path_to_file
-//    const std::string path_to_file = "maze.txt";
-//    parser.ParseImport(path_to_file);
-//    MazeModel maze;
-//    Data data = parser.GetData();
-//    maze.SetData(data);
-//    maze.PrintMatrix();
-//  } else {
-//    throw std::invalid_argument("Error! Incorrect data in the file!");
-//  }
-//
-//}
-
-int MazeModel::Import(const std::string path_to_file) {
+int s21::MazeModel::Import(const std::string path_to_file) {
   ModelError errcode = ModelError::kOk;
   int tmp{}, matrix_right_lines{}, matrix_down_lines{};
   bool right_matrix = true;
   size_t line_size = 0;
-  char* pEnd;
+  char *pEnd;
   std::string line;
   std::ifstream file(path_to_file);
 
@@ -381,13 +308,13 @@ int MazeModel::Import(const std::string path_to_file) {
     if (data_.rows != matrix_right_lines && data_.rows != matrix_down_lines) {
       errcode = ModelError::kErrorReading;
     }
-
   }
   file.close();
   return static_cast<int>(errcode);
 }
 
-MazeModel::ModelError MazeModel::ScanMatrixLineToVector(std::string from, size_t line_size, std::vector<bool>& to) {
+s21::MazeModel::ModelError s21::MazeModel::ScanMatrixLineToVector(
+    const std::string from, const size_t line_size, std::vector<bool> &to) {
   ModelError errcode = ModelError::kOk;
   for (size_t i = 0; (i < line_size) && (errcode == ModelError::kOk); ++i) {
     if (from[i] != ' ') {
@@ -403,57 +330,27 @@ MazeModel::ModelError MazeModel::ScanMatrixLineToVector(std::string from, size_t
   return errcode;
 }
 
-//void Parser::ParseExport(const std::string path_to_file) {
-//  std::ofstream out;          // поток для записи
-//  // Передача файла через path_to_file
-//  out.open("hello.txt");      // открываем файл для записи
-//
-//  // Генерация матриц для тестирования
-//   MazeModel maze;
-//
-//   maze.SetRows(5);
-//   maze.SetCols(5);
-//   maze.Generate();
-//   Data data_tmp = maze.GetData();
-//
-//   if (out.is_open())
-//    {
-//      // introduction of the first line
-//      out << data_tmp.rows << ' ' << data_tmp.cols << std::endl;
-//      // input of the first matrix
-//      for (int i = 0; i < data_tmp.rows; i++) {
-//        for (int j = 0; j < data_tmp.cols; j++) {
-//          out << data_tmp.matrix_right[i][j] << " ";
-//        }
-//        out << std::endl;
-//      }
-//      out << std::endl;
-//      // input of the second matrix
-//      for (int i = 0; i < data_tmp.rows; i++) {
-//        for (int j = 0; j < data_tmp.cols; j++) {
-//          out << data_tmp.matrix_down[i][j] << " ";
-//        }
-//        out << std::endl;
-//      }
-//    out.close();
-//    }
-//    // maze.PrintMatrix();
-//}
+void s21::MazeModel::Export(const std::string path_to_file) {
+  std::ofstream out;
+  out.open(path_to_file);
 
-// int main() {
-//
-//   s21::Parser &parser = s21::Parser::GetInstance();
-//   const std::string path_to_file = "maze3x3.txt";
-//   //parser.ParseImportValidator(path_to_file);
-//   //std::cout << "validator end" << std::endl;
-//   MazeModel maze;
-//   parser.ParseImport(path_to_file);
-//   Data data = parser.GetData();
-//   maze.SetData(data);
-//   // maze.SetRows(3);
-//   // maze.SetCols(3);
-//
-//   //parser.ParseExport(path_to_file);
-//   // maze.Generate();
-//   maze.PrintMatrix();
-// }
+  if (out.is_open()) {
+    out << data_.rows << " " << data_.cols << std::endl;
+
+    for (int i = 0, end_i = data_.rows; i < end_i; ++i) {
+      for (int j = 0, end_j = data_.cols; j < end_j; ++j) {
+        out << data_.matrix_right[i][j] << " ";
+      }
+      out << std::endl;
+    }
+    out << std::endl;
+
+    for (int i = 0, end_i = data_.rows; i < end_i; ++i) {
+      for (int j = 0, end_j = data_.cols; j < end_j; ++j) {
+        out << data_.matrix_down[i][j] << " ";
+      }
+      out << std::endl;
+    }
+    out.close();
+  }
+}

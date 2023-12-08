@@ -7,7 +7,6 @@
 #include <QKeyEvent>
 #include <QMainWindow>
 #include <QPainter>
-#include <QDebug>
 #include <QString>
 #include <vector>
 

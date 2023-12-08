@@ -34,7 +34,6 @@ void s21::MazeWindow::Import() {
       this, tr("Open File"), QDir::homePath(), tr("*.txt"));
 
   if (!path_to_file.isEmpty()) {
-
     QFileInfo file(path_to_file);
 
     if (!file.exists()) {
@@ -43,14 +42,15 @@ void s21::MazeWindow::Import() {
     }
 
     if (!file.isReadable()) {
-      error_message.showMessage("Unable to open file for reading");
+      error_message.showMessage("Unable to open file for import maze");
       return;
     }
 
     int errcode = controller_.Import(path_to_file.toStdString());
 
     if (errcode) {
-      error_message.showMessage("Uncorrected data in file. Cannot build the maze");
+      error_message.showMessage(
+          "Uncorrected data in file. Cannot build the maze");
       return;
     }
 
@@ -68,16 +68,15 @@ void s21::MazeWindow::Export() {
   QString path_to_file =
       QFileDialog::getSaveFileName(this, tr("Save Maze"), QDir::homePath(),
                                    tr("Maze (*.txt);;All Files (*)"));
-  if (path_to_file.isEmpty()) {
-    return;
+  if (!path_to_file.isEmpty()) {
+    QFile file(path_to_file);
+    if (!file.open(QIODevice::WriteOnly)) {
+      QErrorMessage error_message;
+      error_message.showMessage("Unable to open file for export maze");
+      return;
+    }
+    controller_.Export(path_to_file.toStdString());
   }
-  QFile file(path_to_file);
-  if (!file.open(QIODevice::WriteOnly)) {
-    QErrorMessage error_message;
-    error_message.showMessage("Unable to open file");
-    return;
-  }
-  controller_.Export(path_to_file.toStdString());
 }
 
 void s21::MazeWindow::Generate() {
