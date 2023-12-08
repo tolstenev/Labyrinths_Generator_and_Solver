@@ -32,16 +32,40 @@ void s21::MazeWindow::SolveDefault() {
 void s21::MazeWindow::Import() {
   QString path_to_file = QFileDialog::getOpenFileName(
       this, tr("Open File"), QDir::homePath(), tr("*.txt"));
+
   if (path_to_file.isEmpty()) {
+    error_message.showMessage("Uncorrected filename or path to file");
     return;
   }
-  QFile file(path_to_file);
-  if (!file.open(QIODevice::ReadOnly)) {
-    QErrorMessage error_message;
-    error_message.showMessage("Unable to open file");
+
+  QFileInfo file(path_to_file);
+
+  if (!file.exists()) {
+    error_message.showMessage("File does not exist");
     return;
   }
-  controller_.Import(path_to_file.toStdString());
+
+  if (!file.isReadable()) {
+    error_message.showMessage("Unable to open file for reading");
+    return;
+  }
+
+  int errcode = controller_.Import(path_to_file.toStdString());
+
+  if (errcode) {
+    error_message.showMessage("Uncorrected data in file. Cannot build the maze");
+    return;
+  }
+
+  data_ = controller_.GetData();
+  ui_->sb_vertical_cells->setValue(data_.rows);
+  ui_->sb_horizont_cells->setValue(data_.cols);
+  data_exist_ = true;
+  show_maze_ = true;
+
+  qDebug() << ("data in");
+
+  repaint();
 }
 
 void s21::MazeWindow::Export() {
@@ -143,10 +167,12 @@ void s21::MazeWindow::DrawSolving(QPainter *painter) {
 
 void s21::MazeWindow::Solve() {
   if (data_exist_ && !controller_.IsSolved()) {
-    data_.way = controller_.GetWay(start_, finish_);
-    data_.way_steps = controller_.GetWaySteps();
-    show_way_ = true;
-    update();
+    if (show_maze_) {
+      data_.way = controller_.GetWay(start_, finish_);
+      data_.way_steps = controller_.GetWaySteps();
+      show_way_ = true;
+      update();
+    }
   } else {
     QErrorMessage error_message;
     error_message.showMessage("This maze has no solution");
@@ -181,7 +207,7 @@ void s21::MazeWindow::mouseReleaseEvent(QMouseEvent *event) {
       p.y() < start_y_ + size_) {
     int row = (p.y() - start_y_) / cell_height_;
     int col = (p.x() - start_x_) / cell_width_;
-    if (!data_exist_) {
+    if (!data_exist_ || !show_maze_) {
       Generate();
     } else if (!start_is_set_) {
       start_ = std::make_pair(row, col);

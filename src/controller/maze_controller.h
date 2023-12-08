@@ -16,7 +16,7 @@ class MazeController {
 
   void SetRows(int rows) { model_.SetRows(rows); };
   void SetCols(int cols) { model_.SetCols(cols); };
-
+  Data GetData() { return model_.GetData(); }
   const std::array<std::pair<int, int>, 250>& GetWay(std::pair<int, int> start,
                                          std::pair<int, int> finish) {
     model_.Solution(start, finish);
@@ -27,12 +27,14 @@ class MazeController {
   void ClearWay() { model_.ClearWay(); }
   bool IsSolved() { return model_.IsSolved(); };
 
- void Import(const std::string path_to_file) {
-    Parser::GetInstance().ParseImport(path_to_file);
+ int Import(const std::string path_to_file) {
+   int errcode = model_.Import(path_to_file);
+   return errcode;
+//    Parser::GetInstance().ParseImport(path_to_file);
  }
 
  void Export(const std::string path_to_file) {
-    Parser::GetInstance().ParseExport(path_to_file);
+//    Parser::GetInstance().ParseExport(path_to_file);
  }
 
  private:

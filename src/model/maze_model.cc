@@ -1,10 +1,13 @@
 #include "maze_model.h"
+#include <QDebug>
+#include <QString>
+#include <iostream>
 
 using namespace s21;
 
 void MazeModel::Generate() {
   ClearWay();
-  SizeMatrix(data_.rows, data_.cols);
+  ResizeMatrix();
   std::vector<Cell> str(data_.cols);
   int set_count = 1;
   for (int i = 0; i < data_.cols; i++) {
@@ -126,12 +129,12 @@ void MazeModel::SetRows(int rows) { data_.rows = rows; }
 
 void MazeModel::SetCols(int cols) { data_.cols = cols; }
 
-void MazeModel::SizeMatrix(int rows, int cols) {
-  data_.matrix_right.resize(rows);
-  data_.matrix_down.resize(rows);
-  for (int i = 0; i < rows; i++) {
-    data_.matrix_right[i].resize(cols);
-    data_.matrix_down[i].resize(cols);
+void MazeModel::ResizeMatrix() {
+  data_.matrix_right.resize(data_.rows);
+  data_.matrix_down.resize(data_.rows);
+  for (int i = 0; i < data_.rows; i++) {
+    data_.matrix_right[i].resize(data_.cols);
+    data_.matrix_down[i].resize(data_.cols);
   }
 }
 
@@ -259,176 +262,191 @@ void MazeModel::PrintMatrix() {
 
 //parser
 
-void Parser::ParseImportValidator(const std::string path_to_file) {
-  std::string line;
-  // Передача файла через path_to_file
-  std::ifstream file("maze.txt");
-  
-  if (!file.is_open()) {
-    throw std::invalid_argument("Error! File Not Found!");
-  }
-  // variables for checking data in a file
-  int rows = 0;
-  int cols = 0;
-  int rows_first_matrix = 0;
-  int rows_second_matrix = 0;
+//void Parser::ParseImportValidator(const std::string path_to_file) {
+//  std::string line;
+//  // Передача файла через path_to_file
+//  std::ifstream file("maze.txt");
+//
+//  if (!file.is_open()) {
+//    throw std::invalid_argument("Error! File Not Found!");
+//  }
+//  // variables for checking data in a file
+//  int rows = 0;
+//  int cols = 0;
+//  int rows_first_matrix = 0;
+//  int rows_second_matrix = 0;
+//
+//  int first_line = 0;
+//  int count = 0;
+//  char* pEnd;
+//
+//  // loop for writing values to check
+//  while (std::getline(file, line))
+//  {
+//    if (first_line == 0) {
+//      rows = std::strtof(line.c_str(), &pEnd);
+//      cols = std::strtof(pEnd, NULL);
+//      //std::cout << rows << std::endl; // первый символ в первой строке
+//      //std::cout << cols << std::endl; // второй символ в первой строчке
+//      first_line++;
+//      continue;
+//    }
+//
+//    if (line.size() == 0) {
+//      count++;
+//      continue;
+//    }
+//
+//    if (count == 0) {
+//      //std::cout << rows_first_matrix << std::endl; // вывод 1 матрицы
+//      rows_first_matrix++;
+//      continue;
+//    }
+//
+//    //std::cout << rows_second_matrix << std::endl; // вывод 1 матрицы
+//    rows_second_matrix++;
+//
+//  }
+//
+//  file.close();
+//
+//  // condition for checking data in a file
+//  if (rows == rows_first_matrix && rows == rows_second_matrix) {
+//    s21::Parser &parser = s21::Parser::GetInstance();
+//    // Передача файла через path_to_file
+//    const std::string path_to_file = "maze.txt";
+//    parser.ParseImport(path_to_file);
+//    MazeModel maze;
+//    Data data = parser.GetData();
+//    maze.SetData(data);
+//    maze.PrintMatrix();
+//  } else {
+//    throw std::invalid_argument("Error! Incorrect data in the file!");
+//  }
+//
+//}
 
-  int first_line = 0;
-  int count = 0;
+int MazeModel::Import(const std::string path_to_file) {
+  ModelError errcode = ModelError::kOk;
+  int tmp{}, matrix_right_lines{}, matrix_down_lines{};
+  bool right_matrix = true;
+  size_t line_size = 0;
   char* pEnd;
+  std::string line;
+  std::ifstream file(path_to_file);
 
-  // loop for writing values to check
-  while (std::getline(file, line))
-  { 
-    if (first_line == 0) {
-      rows = std::strtof(line.c_str(), &pEnd);
-      cols = std::strtof(pEnd, NULL);
-      //std::cout << rows << std::endl; // первый символ в первой строке
-      //std::cout << cols << std::endl; // второй символ в первой строчке
-      first_line++;
-      continue;
-    }
+  std::getline(file, line);
 
-    if (line.size() == 0) {
-      count++;
-      continue;
-    }
-
-    if (count == 0) {
-      //std::cout << rows_first_matrix << std::endl; // вывод 1 матрицы
-      rows_first_matrix++;
-      continue;
-    }
-
-    //std::cout << rows_second_matrix << std::endl; // вывод 1 матрицы
-    rows_second_matrix++;
-
-  }
-
-  file.close();
-
-  // condition for checking data in a file
-  if (rows == rows_first_matrix && rows == rows_second_matrix) {
-    s21::Parser &parser = s21::Parser::GetInstance();
-    // Передача файла через path_to_file
-    const std::string path_to_file = "maze.txt";
-    parser.ParseImport(path_to_file);
-    MazeModel maze;
-    Data data = parser.GetData();
-    maze.SetData(data);
-    maze.PrintMatrix();
+  tmp = std::strtol(line.c_str(), &pEnd, 10);
+  if (tmp > 0 && tmp < 51) {
+    data_.rows = tmp;
   } else {
-    throw std::invalid_argument("Error! Incorrect data in the file!");
+    errcode = ModelError::kErrorReading;
+    qDebug() << ("data_.rows");
+    qDebug() << QString::number(tmp);
+
   }
 
-}
+  if (errcode == ModelError::kOk) {
+    tmp = std::strtol(pEnd, NULL, 10);
+    if (tmp > 0 && tmp < 51) {
+      data_.cols = tmp;
+    } else {
+      errcode = ModelError::kErrorReading;
+      qDebug() << ("data_.cols");
 
-void Parser::ParseImport(const std::string path_to_file) {
-  std::string line;
-  // Передача файла через path_to_file
-  std::ifstream file(path_to_file); // окрываем файл для чтения
-
-  if (!file.is_open()) {
-    throw std::invalid_argument("Error! File Not Found!");
-  }
-  int lines_count = 0;
-  int count = 0;
-  char* pEnd;
-  
-  while (std::getline(file, line))
-  {
-    // process first line
-    if (lines_count == 0) {
-      data_.rows = std::strtof(line.c_str(), &pEnd);
-      data_.cols = std::strtof(pEnd, NULL);
-      // std::cout << std::strtof(line.c_str(), &pEnd) << std::endl; // первый символ в первой строке
-      // std::cout << std::strtof(pEnd, NULL) << std::endl; // второй символ в первой строчке
-      lines_count++;
-      continue;
     }
 
-    // goto next matrix
-    if (line.size() == 0) {
-      //x = 0;
-      count++;
-      continue;
-    }
+    ResizeMatrix();
 
-    // process right matrix
-    if (count == 0) {
-      std::vector<bool> rm_tmp;
-      for (size_t y = 0; y < line.size();y++) {
-        if (line[y] != ' ') {
-          // bool 1 and 0 
-          if (line[y] == '1') {
-            rm_tmp.push_back(true);
-          } else {
-            rm_tmp.push_back(false);
-          }
-          // std::cout << "[" << x << "][" << y / 2 << "] " << line[y] << std::endl; // вывод 1 матрицы
+    while (std::getline(file, line) && (errcode == ModelError::kOk)) {
+      line_size = line.size();
+
+      if (line_size == 0) {
+        right_matrix = false;
+        continue;
+      }
+
+      std::vector<bool> tmp_vector;
+      errcode = ScanMatrixLineToVector(line, line_size, tmp_vector);
+      qDebug() << QString::number(static_cast<int>(errcode));
+
+      if (errcode == ModelError::kOk) {
+        if (right_matrix) {
+          data_.matrix_right.push_back(tmp_vector);
+          matrix_right_lines++;
+        } else {  // down matrix
+          data_.matrix_down.push_back(tmp_vector);
+          matrix_down_lines++;
         }
       }
-      data_.matrix_right.push_back(rm_tmp);
-      //x++;
-      continue;
-    } 
-    
-    // process down matrix
-    std::vector<bool> dm_tmp;
-    for (size_t y = 0; y < line.size();y++) {
-      if (line[y] != ' ') {
-        // bool 1 and 0 
-          if (line[y] == '1') {
-            dm_tmp.push_back(true);
-          } else {
-            dm_tmp.push_back(false);
-          }
-        // std::cout << "[" << x << "][" << y / 2 << "] " << line[y] << std::endl; // вывод 2 матрицы
-      }
     }
-    data_.matrix_down.push_back(dm_tmp);
-    //x++;
-  }
 
+    if (data_.rows != matrix_right_lines && data_.rows != matrix_down_lines) {
+      errcode = ModelError::kErrorReading;
+      qDebug() << ("data_.rows != matrix_right_lines");
+
+    }
+
+    PrintMatrix();
+
+  }
   file.close();
+  return static_cast<int>(errcode);
 }
 
-void Parser::ParseExport(const std::string path_to_file) {
-  std::ofstream out;          // поток для записи
-  // Передача файла через path_to_file
-  out.open("hello.txt");      // открываем файл для записи
-
-  // Генерация матриц для тестирования
-   MazeModel maze;
-  
-   maze.SetRows(5);
-   maze.SetCols(5);
-   maze.Generate();
-   Data data_tmp = maze.GetData();
-
-   if (out.is_open())
-    {
-      // introduction of the first line
-      out << data_tmp.rows << ' ' << data_tmp.cols << std::endl;
-      // input of the first matrix
-      for (int i = 0; i < data_tmp.rows; i++) {
-        for (int j = 0; j < data_tmp.cols; j++) {
-          out << data_tmp.matrix_right[i][j] << " ";
-        }
-        out << std::endl;
+MazeModel::ModelError MazeModel::ScanMatrixLineToVector(std::string from, size_t line_size, std::vector<bool> to) {
+  ModelError errcode = ModelError::kOk;
+  for (size_t i = 0; (i < line_size) && (errcode == ModelError::kOk); ++i) {
+    if (from[i] != ' ') {
+      if (from[i] == '1') {
+        to.push_back(true);
+      } else if (from[i] == '0') {
+        to.push_back(false);
+      } else {
+        errcode = ModelError::kErrorReading;
       }
-      out << std::endl;
-      // input of the second matrix
-      for (int i = 0; i < data_tmp.rows; i++) {
-        for (int j = 0; j < data_tmp.cols; j++) {
-          out << data_tmp.matrix_down[i][j] << " ";
-        }
-        out << std::endl;
-      }
-    out.close();
     }
-    // maze.PrintMatrix();
+  }
+  return errcode;
 }
+
+//void Parser::ParseExport(const std::string path_to_file) {
+//  std::ofstream out;          // поток для записи
+//  // Передача файла через path_to_file
+//  out.open("hello.txt");      // открываем файл для записи
+//
+//  // Генерация матриц для тестирования
+//   MazeModel maze;
+//
+//   maze.SetRows(5);
+//   maze.SetCols(5);
+//   maze.Generate();
+//   Data data_tmp = maze.GetData();
+//
+//   if (out.is_open())
+//    {
+//      // introduction of the first line
+//      out << data_tmp.rows << ' ' << data_tmp.cols << std::endl;
+//      // input of the first matrix
+//      for (int i = 0; i < data_tmp.rows; i++) {
+//        for (int j = 0; j < data_tmp.cols; j++) {
+//          out << data_tmp.matrix_right[i][j] << " ";
+//        }
+//        out << std::endl;
+//      }
+//      out << std::endl;
+//      // input of the second matrix
+//      for (int i = 0; i < data_tmp.rows; i++) {
+//        for (int j = 0; j < data_tmp.cols; j++) {
+//          out << data_tmp.matrix_down[i][j] << " ";
+//        }
+//        out << std::endl;
+//      }
+//    out.close();
+//    }
+//    // maze.PrintMatrix();
+//}
 
 // int main() {
 //

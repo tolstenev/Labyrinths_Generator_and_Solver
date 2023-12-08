@@ -3,9 +3,11 @@
 
 #include <QErrorMessage>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QKeyEvent>
 #include <QMainWindow>
 #include <QPainter>
+#include <QDebug>
 #include <vector>
 
 #include "../controller/maze_controller.h"
@@ -43,6 +45,7 @@ class MazeWindow : public QMainWindow {
  private:
   Ui::MazeWindow *ui_;
   MazeController &controller_;
+  QErrorMessage error_message;
   Data data_;
   const double start_x_{280};
   const double start_y_{20};
