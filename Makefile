@@ -9,6 +9,7 @@ CONTROLLER_HDR	:= ./src/controller/maze_controller.h
 MODEL_HDR		:= ./src/model/maze_model.h
 MODEL_SRC		:= ./src/model/maze_model.cc
 HELPER_HDR		:= ./src/helpers/data_objects.h
+REPORT			:= gcov_report
 
 INSTALL_DIR 	:= $(HOME)/Desktop
 
@@ -31,6 +32,28 @@ open:
 uninstall:
 	rm -rf ./build
 	rm -rf $(INSTALL_DIR)/$(NAME).app
+
+dvi:
+	open ./reference.html
+
+dvi_rus:
+	open ./reference_rus.html
+
+dist: clean
+	@clear
+	mkdir $(NAME)/
+	mkdir $(NAME)/src
+	cp -r src/ $(NAME)/src
+	cp .clang-format $(NAME)
+	cp Makefile CMakeLists.txt reference.html reference_rus.html $(NAME)
+	tar -cvzf $(NAME).tar.gz $(NAME)
+	rm -rf $(NAME)
+
+gcov_report: tests
+	lcov -t "$(REPORT)" -o $(REPORT).info -c -d ./ --no-external --exclude '$(CURRENT_DIR)/resources/*' --ignore-errors mismatch --ignore-errors unused
+	genhtml ./$(REPORT).info -o ./report/ --ignore-errors empty
+	rm -rf ./*.gcno ./*.gcda ./$(REPORT).*
+	open ./report/index.html
 
 lint: .clang-format
 	@clear
