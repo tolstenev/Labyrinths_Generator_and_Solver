@@ -9,7 +9,7 @@ CONTROLLER_HDR	:= ./src/controller/maze_controller.h
 MODEL_HDR		:= ./src/model/maze_model.h
 MODEL_SRC		:= ./src/model/maze_model.cc
 HELPER_HDR		:= ./src/helpers/data_objects.h
-TEST_PATH		:= ./src/google_tests/tests.cc
+TEST_PATH		:= ./src/google_tests/*.cc
 TEST_NAME		:= tests
 REPORT			:= gcov_report
 
