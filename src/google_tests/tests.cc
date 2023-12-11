@@ -18,38 +18,35 @@ TEST(maze_tests, generate_1) {
 
 TEST(maze_tests, way_1) {
   MazeModel A;
-  Parser B = Parser::GetInstance();
-  std::string file_path = "test.txt";
-  parser.ParseImport(file_path);
-  A.SetData() = B.GetData();
+  std::string file_path = "/Users/marbrand/maze3/src/google_tests/test.txt";
+  A.Import(file_path);
+  A.Solution(std::make_pair(0, 0), std::make_pair(4, 4));
 
   std::vector<std::pair<int, int>> coordinates;
 
-  coordinates.push_back(std::make_pair(0, 0));
-  coordinates.push_back(std::make_pair(1, 0));
-  coordinates.push_back(std::make_pair(2, 0));
-  coordinates.push_back(std::make_pair(3, 0));
-  coordinates.push_back(std::make_pair(3, 1));
-  coordinates.push_back(std::make_pair(3, 2));
-  coordinates.push_back(std::make_pair(4, 2));
-  coordinates.push_back(std::make_pair(4, 3));
   coordinates.push_back(std::make_pair(4, 4));
-  <std::pair<int, int>> std::array[250];
-  std::copy(coordinates.begin(), coordinates.end(), array);
+  coordinates.push_back(std::make_pair(4, 3));
+  coordinates.push_back(std::make_pair(4, 2));
+  coordinates.push_back(std::make_pair(3, 2));
+  coordinates.push_back(std::make_pair(3, 1));
+  coordinates.push_back(std::make_pair(3, 0));
+  coordinates.push_back(std::make_pair(2, 0));
+  coordinates.push_back(std::make_pair(1, 0));
+  coordinates.push_back(std::make_pair(0, 0));
+  std::array<std::pair<int, int>, 250> arr;
+  std::copy(coordinates.begin(), coordinates.end(), arr.begin());
   A.Solution(std::make_pair(0, 0), std::make_pair(4, 4));
-
-  EXPECT_TRUE(A.GetWay() == array);
+  EXPECT_TRUE(A.GetData().is_solved);
+  EXPECT_EQ(A.GetWay(), arr);
 }
 
 TEST(maze_tests, way_2) {
   MazeModel A;
-  Parser B = Parser::GetInstance();
-  std::string file_path = "test_wrong.txt";
-  parser.ParseImport(file_path);
-  A.SetData() = B.GetData();
-
-  EXPECT_THROW(A.Solution(std::make_pair(0, 0), std::make_pair(4, 4)),
-               std::invalid_argument);
+  std::string file_path =
+      "/Users/marbrand/maze3/src/google_tests/test_wrong.txt";
+  A.Import(file_path);
+  A.Solution(std::make_pair(0, 0), std::make_pair(4, 4));
+  EXPECT_FALSE(A.GetData().is_solved);
 }
 
 }  // namespace s21

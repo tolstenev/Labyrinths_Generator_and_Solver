@@ -144,6 +144,7 @@ void s21::MazeModel::Solution(std::pair<int, int> start,
 std::vector<std::vector<s21::Finder>> s21::MazeModel::InitLab() {
   std::vector<std::vector<s21::Finder>> lab(data_.rows,
                                             std::vector<Finder>(data_.cols));
+
   for (int i = 0; i < data_.rows; i++) {
     for (int j = 0; j < data_.cols; j++) {
       if (!data_.matrix_right[i][j]) lab[i][j].right = &lab[i][j + 1];
@@ -151,6 +152,7 @@ std::vector<std::vector<s21::Finder>> s21::MazeModel::InitLab() {
       if (i > 0 && !data_.matrix_down[i - 1][j]) lab[i][j].up = &lab[i - 1][j];
       if (j > 0 && !data_.matrix_right[i][j - 1])
         lab[i][j].left = &lab[i][j - 1];
+      //  std::cout << "*******" << std::endl;
     }
   }
   return lab;
@@ -354,3 +356,27 @@ void s21::MazeModel::Export(const std::string path_to_file) {
     out.close();
   }
 }
+
+// int main() {
+//   s21::MazeModel A;
+//   // A.SetRows(2);
+//   // A.SetCols(2);
+//   // A.Generate();
+//   // //   try {
+//   //      std::stack<std::pair<int, int>> B = A.Solution(std::make_pair(0,
+//   // 0),
+//   //      std::make_pair(4, 4));
+//   //   } catch (std::exception &e) {
+//   //     std::cout << e.what() << std::endl;
+//   //   }
+//   // std::stack<std::pair<int, int>> B =
+//   std::string file_path =
+//   "/Users/marbrand/maze3/src/google_tests/test_wrong.txt"; int q =
+//   A.Import(file_path);
+//   // std::cout << q << std::endl;
+//   // A.PrintMatrix();
+//   A.PrintLab();
+//   A.Solution(std::make_pair(0, 0), std::make_pair(4, 3));
+//   std::cout << A.GetData().is_solved << std::endl;
+//   // PrintStack(A.GetWay());
+// }

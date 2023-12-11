@@ -164,13 +164,15 @@ void s21::MazeWindow::Solve() {
   if (data_exist_ && !controller_.IsSolved()) {
     if (show_maze_) {
       data_.way = controller_.GetWay(start_, finish_);
-      data_.way_steps = controller_.GetWaySteps();
-      show_way_ = true;
-      update();
+      if (controller_.IsSolved()) {
+        data_.way_steps = controller_.GetWaySteps();
+        show_way_ = true;
+        update();
+      } else {
+        QErrorMessage error_message;
+        error_message.showMessage("This maze has no solution");
+      }
     }
-  } else {
-    QErrorMessage error_message;
-    error_message.showMessage("This maze has no solution");
   }
 }
 
