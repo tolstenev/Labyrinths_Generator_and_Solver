@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Maze</title>
+</head>
+<body>
+<h1>Maze Program Documentation</h1>
+<h3>The program is developed by students of School 21: yonnarge, marbrand, madamkyl</h3>
+<h2>General Information</h2>
+<p>
+    The Maze program is a desktop application that allows solving two-dimensional mazes.
+</p>
+
+<h2>Generation</h2>
+<p>
+    In the Maze program, you can generate an ideal maze according to the Eller's algorithm without closed areas and loops by:
+</p>
+<ul>
+    <li>Choosing the desired number of columns and rows in the maze</li>
+    <li>Clicking the "Generate" button</li>
+    <li>When clicking the "Solve" button, the maze will find a path from the top left cell to the bottom right</li>
+</ul>
+<p>
+    Note that you can use your own start and end points. Simply click on the desired cells.
+</p>
+
+<p>
+    Importing a maze from a txt file is available in the following format.
+</p>
+<p>
+    The file contains two numbers - the number of rows and columns, as well as two matrices containing the position of vertical and horizontal walls, respectively.
+</p>
+Example:<br>
+4 4<br>
+0 0 0 1<br>
+1 0 1 1<br>
+0 1 0 1<br>
+0 0 0 1<br>
+<br>
+1 0 1 0<br>
+0 0 1 0<br>
+1 1 0 1<br>
+1 1 1 1<br>
+</p>
+
+<p>
+    The generated maze can be exported to a txt file in the format described above.
+</p>
+
+<h2>Limitations</h2>
+<p>
+    When using the Maze program, the following limitations should be considered:
+</p>
+<ul>
+    <li>Maximum maze size - 50 x 50 cells.</li>
+    <li>Building solutions is only available for two points.</li>
+    <li>The maze cannot be scaled - the field is set to a size of 500 x 500 pixels, with a line width of 2 pixels.</li>
+    <li>Passage width - 1 cell.</li>
+</ul>
+
+<h2>Example of Use</h2>
+<ul>
+    <li>Set the desired width and height</li>
+    <li>Click on an empty maze field to generate</li>
+    <li>Select the start point with the next mouse click</li>
+    <li>Then also select the end point</li>
+    <li>The next click will clear the field from the solution</li>
+</ul>
+
+</body>
+</html>

@@ -23,7 +23,7 @@ void s21::MazeWindow::ConnectSlots() {
 
 void s21::MazeWindow::SolveDefault() {
   start_ = std::make_pair(0, 0);
-  finish_ = std::make_pair(data_.cols - 1, data_.rows - 1);
+  finish_ = std::make_pair(data_.rows - 1, data_.cols - 1);
   start_is_set_ = true;
   finish_is_set_ = true;
   Solve();
@@ -59,6 +59,8 @@ void s21::MazeWindow::Import() {
     ui_->sb_horizont_cells->setValue(data_.cols);
     data_exist_ = true;
     show_maze_ = true;
+    show_way_ = false;
+    controller_.ClearWay();
 
     repaint();
   }
@@ -100,13 +102,10 @@ void s21::MazeWindow::paintEvent(QPaintEvent *event) {
 }
 
 void s21::MazeWindow::DrawBoarders(QPainter *painter) {
-  int start_x = 280;
-  int start_y = 20;
-  int size = 500;
-  painter->drawLine(start_x, start_y, start_x + size, start_y);
-  painter->drawLine(start_x, start_y, start_x, start_y + size);
-  painter->drawLine(start_x, start_y + size, start_x + size, start_y + size);
-  painter->drawLine(start_x + size, start_y, start_x + size, start_y + size);
+  painter->drawLine(start_x_, start_y_, start_x_ + size_, start_y_);
+  painter->drawLine(start_x_, start_y_, start_x_, start_y_ + size_);
+  painter->drawLine(start_x_, start_y_ + size_, start_x_ + size_, start_y_ + size_);
+  painter->drawLine(start_x_ + size_, start_y_, start_x_ + size_, start_y_ + size_);
 }
 
 void s21::MazeWindow::DrawMaze(QPainter *painter) {

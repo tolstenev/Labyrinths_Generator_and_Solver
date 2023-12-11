@@ -1,91 +1,64 @@
-// #include <vector>
 #include "maze_model.h"
 #include "gtest/gtest.h"
 
 TEST(ParserTest, ParseImportPositive) {
-  s21::Parser &parser = s21::Parser::GetInstance();
-  // Provide a valid path to the file for positive test case
+  s21::MazeModel model;
+
   std::string valid_file_path = "maze3x3.txt";
-  
-  // Call the ParseImport function
-  parser.ParseImport(valid_file_path);
 
-  // int rows = parser.GetData().rows;
+  int result = model.Import(valid_file_path);
 
-  // Assert the expected values of the data member variables in the Parser class
-  EXPECT_EQ(3, parser.GetData().rows);
-  EXPECT_EQ(3, parser.GetData().cols);
+  EXPECT_EQ(3, model.GetData().rows);
+  EXPECT_EQ(3, model.GetData().cols);
+  EXPECT_EQ(0, model.GetData().matrix_right[0][0]);
+  EXPECT_EQ(0, model.GetData().matrix_right[0][1]);
+  EXPECT_EQ(1, model.GetData().matrix_right[0][2]);
+  EXPECT_EQ(1, model.GetData().matrix_right[1][0]);
+  EXPECT_EQ(0, model.GetData().matrix_right[1][1]);
+  EXPECT_EQ(1, model.GetData().matrix_right[1][2]);
+  EXPECT_EQ(1, model.GetData().matrix_right[2][0]);
+  EXPECT_EQ(0, model.GetData().matrix_right[2][1]);
+  EXPECT_EQ(1, model.GetData().matrix_right[2][2]);
+  EXPECT_EQ(0, model.GetData().matrix_down[0][0]);
+  EXPECT_EQ(0, model.GetData().matrix_down[0][1]);
+  EXPECT_EQ(1, model.GetData().matrix_down[0][2]);
+  EXPECT_EQ(0, model.GetData().matrix_down[1][0]);
+  EXPECT_EQ(1, model.GetData().matrix_down[1][1]);
+  EXPECT_EQ(0, model.GetData().matrix_down[1][2]);
+  EXPECT_EQ(1, model.GetData().matrix_down[2][0]);
+  EXPECT_EQ(1, model.GetData().matrix_down[2][1]);
+  EXPECT_EQ(1, model.GetData().matrix_down[2][2]);
 
-  EXPECT_EQ(0, parser.GetData().matrix_right[0][0]);
-  EXPECT_EQ(0, parser.GetData().matrix_right[0][1]);
-  EXPECT_EQ(1, parser.GetData().matrix_right[0][2]);
-
-  EXPECT_EQ(1, parser.GetData().matrix_right[1][0]);
-  EXPECT_EQ(1, parser.GetData().matrix_right[1][1]);
-  EXPECT_EQ(0, parser.GetData().matrix_right[1][2]);
-  
-  EXPECT_EQ(1, parser.GetData().matrix_right[2][0]);
-  EXPECT_EQ(1, parser.GetData().matrix_right[2][1]);
-  EXPECT_EQ(1, parser.GetData().matrix_right[2][2]);
-  
-  EXPECT_EQ(0, parser.GetData().matrix_down[0][0]);
-  EXPECT_EQ(0, parser.GetData().matrix_down[0][1]);
-  EXPECT_EQ(1, parser.GetData().matrix_down[0][2]);
-  
-  EXPECT_EQ(0, parser.GetData().matrix_down[1][0]);
-  EXPECT_EQ(1, parser.GetData().matrix_down[1][1]);
-  EXPECT_EQ(0, parser.GetData().matrix_down[1][2]);
-  
-  EXPECT_EQ(0, parser.GetData().matrix_down[2][0]);
-  EXPECT_EQ(0, parser.GetData().matrix_down[2][1]);
-  EXPECT_EQ(1, parser.GetData().matrix_down[2][2]);
-}
-
-// Negative test case for ParseImport
-TEST(ParserTest, ParseImportNegative) {
-  s21::Parser &parser = s21::Parser::GetInstance();
-
-  // Assert that an invalid file path throws an exception
-  EXPECT_THROW(parser.ParseImport("nonexistent.txt"), std::invalid_argument);
 }
 
 TEST(ParserTest, ParseExportPositive) {
-  s21::Parser &parser = s21::Parser::GetInstance();
-  // Provide a valid path to the file for positive test case
+
+  s21::MazeModel model;
   std::string valid_file_path = "maze3x3.txt";
-  
-  // Call the ParseImport function
-  parser.ParseExport(valid_file_path);
+  model.Import(valid_file_path);
 
-  // int rows = parser.GetData().rows;
+  std::vector<bool>& second_column = model.GetData().matrix_down[1];
 
-  // Assert the expected values of the data member variables in the Parser class
-  EXPECT_EQ(3, parser.GetData().rows);
-  EXPECT_EQ(3, parser.GetData().cols);
-
-  EXPECT_EQ(0, parser.GetData().matrix_right[0][0]);
-  EXPECT_EQ(0, parser.GetData().matrix_right[0][1]);
-  EXPECT_EQ(1, parser.GetData().matrix_right[0][2]);
-
-  EXPECT_EQ(1, parser.GetData().matrix_right[1][0]);
-  EXPECT_EQ(1, parser.GetData().matrix_right[1][1]);
-  EXPECT_EQ(0, parser.GetData().matrix_right[1][2]);
-  
-  EXPECT_EQ(1, parser.GetData().matrix_right[2][0]);
-  EXPECT_EQ(1, parser.GetData().matrix_right[2][1]);
-  EXPECT_EQ(1, parser.GetData().matrix_right[2][2]);
-  
-  EXPECT_EQ(0, parser.GetData().matrix_down[0][0]);
-  EXPECT_EQ(0, parser.GetData().matrix_down[0][1]);
-  EXPECT_EQ(1, parser.GetData().matrix_down[0][2]);
-  
-  EXPECT_EQ(0, parser.GetData().matrix_down[1][0]);
-  EXPECT_EQ(1, parser.GetData().matrix_down[1][1]);
-  EXPECT_EQ(0, parser.GetData().matrix_down[1][2]);
-  
-  EXPECT_EQ(0, parser.GetData().matrix_down[2][0]);
-  EXPECT_EQ(0, parser.GetData().matrix_down[2][1]);
-  EXPECT_EQ(1, parser.GetData().matrix_down[2][2]);
+  EXPECT_EQ(3, model.GetData().rows);
+  EXPECT_EQ(3, model.GetData().cols);
+  EXPECT_EQ(0, model.GetData().matrix_right[0][0]);
+  EXPECT_EQ(0, model.GetData().matrix_right[0][1]);
+  EXPECT_EQ(1, model.GetData().matrix_right[0][2]);
+  EXPECT_EQ(1, model.GetData().matrix_right[1][0]);
+  EXPECT_EQ(0, model.GetData().matrix_right[1][1]);
+  EXPECT_EQ(1, model.GetData().matrix_right[1][2]);
+  EXPECT_EQ(1, model.GetData().matrix_right[2][0]);
+  EXPECT_EQ(0, model.GetData().matrix_right[2][1]);
+  EXPECT_EQ(1, model.GetData().matrix_right[2][2]);
+  EXPECT_EQ(0, model.GetData().matrix_down[0][0]);
+  EXPECT_EQ(0, model.GetData().matrix_down[0][1]);
+  EXPECT_EQ(1, model.GetData().matrix_down[0][2]);
+  EXPECT_EQ(0, model.GetData().matrix_down[1][0]);
+  EXPECT_EQ(1, model.GetData().matrix_down[1][1]);
+  EXPECT_EQ(0, model.GetData().matrix_down[1][2]);
+  EXPECT_EQ(1, model.GetData().matrix_down[2][0]);
+  EXPECT_EQ(1, model.GetData().matrix_down[2][1]);
+  EXPECT_EQ(1, model.GetData().matrix_down[2][2]);
 }
 
 

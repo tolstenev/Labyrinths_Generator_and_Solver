@@ -295,7 +295,10 @@ int s21::MazeModel::Import(const std::string path_to_file) {
 
       std::vector<bool> tmp_vector;
       errcode = ScanMatrixLineToVector(line, line_size, tmp_vector);
-
+      int size_cols = tmp_vector.size();
+      if (size_cols != data_.cols) {
+        errcode = ModelError::kErrorReading;
+      }
       if (errcode == ModelError::kOk) {
         if (right_matrix) {
           data_.matrix_right.push_back(tmp_vector);
@@ -377,6 +380,7 @@ void s21::MazeModel::Export(const std::string path_to_file) {
 //   // A.PrintMatrix();
 //   A.PrintLab();
 //   A.Solution(std::make_pair(0, 0), std::make_pair(4, 3));
-//   std::cout << A.GetData().is_solved << std::endl;
+//   
+
 //   // PrintStack(A.GetWay());
 // }

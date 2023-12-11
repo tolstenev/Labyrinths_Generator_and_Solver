@@ -11,6 +11,11 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(MACOSX_BUNDLE_ICON_FILE maze.icns)
+set(app_icon_macos "${CMAKE_CURRENT_SOURCE_DIR}/maze.icns")
+set_source_files_properties(${app_icon_macos} PROPERTIES
+        MACOSX_PACKAGE_LOCATION "resources")
+
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
@@ -22,7 +27,9 @@ set(PROJECT_SOURCES
         src/controller/maze_controller.h
         src/model/maze_model.h
         src/model/maze_model.cc
-        src/helpers/data_objects.h)
+        src/helpers/data_objects.h
+        ${app_icon_macos}
+        )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(Maze
