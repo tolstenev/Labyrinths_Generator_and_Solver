@@ -302,13 +302,12 @@ s21::MazeModel::ModelError s21::MazeModel::ScanMatrixLineToVector(
 void s21::MazeModel::Export(const std::string path_to_file) {
   std::ofstream out;
   out.open(path_to_file);
-
   if (out.is_open()) {
     out << data_.rows << " " << data_.cols << std::endl;
 
     for (int i = 0, end_i = data_.rows; i < end_i; ++i) {
       for (int j = 0, end_j = data_.cols; j < end_j; ++j) {
-        out << data_.matrix_right[i][j] << " ";
+        out << data_.matrix_right.at(i).at(j) << " ";
       }
       out << std::endl;
     }
@@ -316,7 +315,7 @@ void s21::MazeModel::Export(const std::string path_to_file) {
 
     for (int i = 0, end_i = data_.rows; i < end_i; ++i) {
       for (int j = 0, end_j = data_.cols; j < end_j; ++j) {
-        out << data_.matrix_down[i][j] << " ";
+        out << data_.matrix_down.at(i).at(j) << " ";
       }
       out << std::endl;
     }

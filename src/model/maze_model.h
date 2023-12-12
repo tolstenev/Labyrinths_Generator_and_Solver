@@ -42,8 +42,6 @@ class MazeModel {
 
   void SetRows(int rows);
   void SetCols(int cols);
-  void PrintMatrix();
-  void PrintLab();
 
   int Import(const std::string path_to_file);
   void Export(const std::string path_to_file);
