@@ -168,7 +168,6 @@ void s21::MazeWindow::Solve() {
         show_way_ = true;
         update();
       } else {
-        QErrorMessage error_message;
         error_message.showMessage("This maze has no solution");
       }
     }
