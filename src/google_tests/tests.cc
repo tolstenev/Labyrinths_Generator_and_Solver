@@ -5,15 +5,17 @@ namespace s21 {
 
 TEST(maze_tests, generate_1) {
   MazeModel A;
-  A.SetRows(3);
-  A.SetCols(3);
+  A.SetRows(30);
+  A.SetCols(30);
   A.Generate();
-  for (int i = 0; i < 3; i++) {
-    EXPECT_TRUE(A.GetData().matrix_right[i][2]);
+  for (int i = 0; i < 30; i++) {
+    EXPECT_TRUE(A.GetData().matrix_right[i][29]);
   }
-  for (int j = 0; j < 3; j++) {
-    EXPECT_TRUE(A.GetData().matrix_down[2][j]);
+  for (int j = 0; j < 30; j++) {
+    EXPECT_TRUE(A.GetData().matrix_down[29][j]);
   }
+  A.Solution(std::make_pair(29, 0), std::make_pair(0, 29));
+    EXPECT_TRUE(A.GetData().is_solved);
 }
 
 TEST(maze_tests, way_1) {

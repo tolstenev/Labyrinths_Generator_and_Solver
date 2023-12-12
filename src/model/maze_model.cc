@@ -218,42 +218,6 @@ void s21::MazeModel::FindWay(std::vector<std::vector<Finder>> lab, int n,
   }
 }
 
-void s21::MazeModel::PrintLab() {
-  for (int i = 0; i < data_.cols; i++) std::cout << "__";
-  std::cout << std::endl;
-  for (int i = 0; i < data_.rows; i++) {
-    std::cout << "|";
-    for (int j = 0; j < data_.cols; j++) {
-      if (data_.matrix_down[i][j]) {
-        std::cout << "_";
-      } else {
-        std::cout << " ";
-      }
-      if (data_.matrix_right[i][j]) {
-        std::cout << "|";
-      } else {
-        std::cout << " ";
-      }
-    }
-    std::cout << std::endl;
-  }
-}
-
-void s21::MazeModel::PrintMatrix() {
-  for (int i = 0; i < data_.rows; i++) {
-    for (int j = 0; j < data_.cols; j++) {
-      std::cout << data_.matrix_right[i][j] << " ";
-    }
-    std::cout << std::endl;
-  }
-  std::cout << std::endl;
-  for (int i = 0; i < data_.rows; i++) {
-    for (int j = 0; j < data_.cols; j++) {
-      std::cout << data_.matrix_down[i][j] << " ";
-    }
-    std::cout << std::endl;
-  }
-}
 
 int s21::MazeModel::Import(const std::string path_to_file) {
   ModelError errcode = ModelError::kOk;
@@ -360,27 +324,3 @@ void s21::MazeModel::Export(const std::string path_to_file) {
   }
 }
 
-// int main() {
-//   s21::MazeModel A;
-//   // A.SetRows(2);
-//   // A.SetCols(2);
-//   // A.Generate();
-//   // //   try {
-//   //      std::stack<std::pair<int, int>> B = A.Solution(std::make_pair(0,
-//   // 0),
-//   //      std::make_pair(4, 4));
-//   //   } catch (std::exception &e) {
-//   //     std::cout << e.what() << std::endl;
-//   //   }
-//   // std::stack<std::pair<int, int>> B =
-//   std::string file_path =
-//   "/Users/marbrand/maze3/src/google_tests/test_wrong.txt"; int q =
-//   A.Import(file_path);
-//   // std::cout << q << std::endl;
-//   // A.PrintMatrix();
-//   A.PrintLab();
-//   A.Solution(std::make_pair(0, 0), std::make_pair(4, 3));
-//   
-
-//   // PrintStack(A.GetWay());
-// }
