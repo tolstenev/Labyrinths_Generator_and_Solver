@@ -58,7 +58,6 @@ void s21::MazeModel::RightWall(std::vector<Cell> &str) {
 
   for (int i = 0; i < data_.cols - 1; i++) {
     int r_wall = dis(gen);
-    // int r_wall = std::rand() % 2;
     if (r_wall) {
       str[i].right = 1;
     } else {
@@ -81,7 +80,6 @@ void s21::MazeModel::DownWall(std::vector<Cell> &str) {
 
   for (int i = 0; i < data_.cols; i++) {
     int d_wall = dis(gen);
-    // int d_wall = std::rand() % 2;
     if (!d_wall) {
       str[i].down = 0;
     } else {
@@ -218,7 +216,6 @@ void s21::MazeModel::FindWay(std::vector<std::vector<Finder>> lab, int n,
   }
 }
 
-
 int s21::MazeModel::Import(const std::string path_to_file) {
   ModelError errcode = ModelError::kOk;
   int tmp{}, matrix_right_lines{}, matrix_down_lines{};
@@ -322,4 +319,3 @@ void s21::MazeModel::Export(const std::string path_to_file) {
     out.close();
   }
 }
-

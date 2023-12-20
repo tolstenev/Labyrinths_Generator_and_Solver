@@ -39,14 +39,10 @@ class MazeModel {
   int GetWaySteps() { return data_.way_steps; };
   void ClearWay();
   bool IsSolved() { return data_.is_solved; };
-
   void SetRows(int rows);
   void SetCols(int cols);
-
   int Import(const std::string path_to_file);
   void Export(const std::string path_to_file);
-
-  //  void PrintStack();
 
  private:
   enum class ModelError : int {
@@ -71,26 +67,6 @@ class MazeModel {
   MazeModel::ModelError ScanMatrixLineToVector(const std::string from,
                                                const size_t line_size,
                                                std::vector<bool> &to);
-};
-
-class Parser {
- public:
-  static Parser &GetInstance() {
-    static Parser instance;
-    return instance;
-  }
-
-  //  void ParseImportValidator(const std::string path_to_file);
-  //  void ParseImport(const std::string path_to_file);
-  //  void ParseExport(const std::string path_to_file);
-  Data GetData() { return data_; };
-
-  // std::vector<int>& GetIndices();
-
- private:
-  Parser() {}
-  Parser(const Parser &);
-  Data data_;
 };
 
 }  // namespace s21

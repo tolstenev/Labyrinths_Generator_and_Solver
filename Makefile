@@ -58,8 +58,7 @@ dist: clean
 	mkdir $(NAME)/
 	mkdir $(NAME)/src
 	cp -r src/ $(NAME)/src
-	cp .clang-format $(NAME)
-	cp Makefile CMakeLists.txt reference.html reference_rus.html $(NAME)
+	cp Makefile CMakeLists.txt reference.html reference_rus.html .clang-format maze.icns $(NAME)
 	tar -cvzf $(NAME).tar.gz $(NAME)
 	rm -rf $(NAME)
 

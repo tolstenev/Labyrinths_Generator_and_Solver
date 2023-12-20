@@ -104,8 +104,10 @@ void s21::MazeWindow::paintEvent(QPaintEvent *event) {
 void s21::MazeWindow::DrawBoarders(QPainter *painter) {
   painter->drawLine(start_x_, start_y_, start_x_ + size_, start_y_);
   painter->drawLine(start_x_, start_y_, start_x_, start_y_ + size_);
-  painter->drawLine(start_x_, start_y_ + size_, start_x_ + size_, start_y_ + size_);
-  painter->drawLine(start_x_ + size_, start_y_, start_x_ + size_, start_y_ + size_);
+  painter->drawLine(start_x_, start_y_ + size_, start_x_ + size_,
+                    start_y_ + size_);
+  painter->drawLine(start_x_ + size_, start_y_, start_x_ + size_,
+                    start_y_ + size_);
 }
 
 void s21::MazeWindow::DrawMaze(QPainter *painter) {
